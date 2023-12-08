@@ -270,6 +270,11 @@
             <stringProp name="Argument.value">int</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="LoginEmailArrayBase64" elementType="Argument">
+            <stringProp name="Argument.value">aW50dW5lX3VzZXI3QHN0YW9kLm9ubWljcm9zb2Z0LmNvbQ==,aW50dW5lX3VzZXI4QHN0YW9kLm9ubWljcm9zb2Z0LmNvbQ==,aW50dW5lX3VzZXI5QHN0YW9kLm9ubWljcm9zb2Z0LmNvbQ==</stringProp>
+            <stringProp name="Argument.name">LoginEmailArrayBase64</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -3190,6 +3195,65 @@ HandleSearchAttendee();</stringProp>
             <intProp name="HTTPSampler.ipSourceType">0</intProp>
           </HTTPSamplerProxy>
           <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ActionHistory" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+    &quot;TypeOfAction&quot;: 2,&#xd;
+    &quot;ResourceEmail&quot;: &quot;${CreateAppointmentParam_Email}&quot;,&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${BookParam_StartTime_Year},&#xd;
+        &quot;Month&quot;: ${BookParam_StartTime_Month},&#xd;
+        &quot;Day&quot;: ${BookParam_StartTime_Date},&#xd;
+        &quot;Hour&quot;: ${BookParam_StartTime_Hours},&#xd;
+        &quot;Minute&quot;: ${BookParam_StartTime_Minutes},&#xd;
+        &quot;Second&quot;: ${BookParam_StartTime_Seconds}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${BookParam_EndTime_Year},&#xd;
+        &quot;Month&quot;: ${BookParam_EndTime_Month},&#xd;
+	   &quot;Day&quot;: ${BookParam_EndTime_Date},&#xd;
+        &quot;Hour&quot;: ${BookParam_EndTime_Hours},&#xd;
+        &quot;Minute&quot;: ${BookParam_EndTime_Minutes},&#xd;
+        &quot;Second&quot;: ${BookParam_EndTime_Seconds}&#xd;
+    },&#xd;
+    &quot;Status&quot;: 0,&#xd;
+    &quot;OrganizerEmail&quot;: &quot;${AccountBook}&quot;,&#xd;
+    &quot;ResourceTypeId&quot;: ${CreateAppointmentParam_ResourceTypeId},&#xd;
+    &quot;Subject&quot;: &quot;test auto&quot;,&#xd;
+    &quot;ResourceID&quot;: ${CreateAppointmentParam_ResourceId},&#xd;
+    &quot;DetailMessage&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/Refactor/api/${apiversion}/${appname}/ActionHistory</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">300</stringProp>
+              <stringProp name="RandomTimer.range">200</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+          </hashTree>
           <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PrepareTimeBook" enabled="true">
             <stringProp name="scriptLanguage">javascript</stringProp>
             <stringProp name="parameters"></stringProp>
@@ -3264,7 +3328,7 @@ PrepareUserAccount();</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="List,Detail,Master,Update - WS" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="List,Detail,Master,Update,Confirm - WS" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
@@ -3344,7 +3408,8 @@ function PreParam()
 {
 	var isExecuteGetAllFloorplan = false;
 	var isExecuteListAppointmentPagging = false;
-	var valswitch = 0;
+	var isExecuteGetUserInfoByID = false;
+	var valswitch = getRandomInt(2);
 	switch(valswitch)
 	{
 		case 0:
@@ -3357,14 +3422,124 @@ function PreParam()
 			break;
 	}
 
+	if(getRandomInt(5) == 1)
+	{
+		isExecuteGetUserInfoByID = true;
+	}
+
 	vars.put(&quot;isExecuteGetAllFloorplan&quot;,isExecuteGetAllFloorplan);
 	vars.put(&quot;isExecuteListAppointmentPagging&quot;,isExecuteListAppointmentPagging);
+	vars.put(&quot;isExecuteGetUserInfoByID&quot;, isExecuteGetUserInfoByID);
 }
 
 PreParam();
 </stringProp>
         </JSR223PreProcessor>
         <hashTree/>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteGetUserInfoByID" enabled="true">
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+          <stringProp name="IfController.condition">${isExecuteGetUserInfoByID}</stringProp>
+        </IfController>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamGetUserInfoByID" enabled="true">
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
+function PreParamGetUserInfoByID()
+{
+	var loginEmailArray = vars.get(&quot;LoginEmailArray&quot;).split(&apos;,&apos;);
+	var loginUserIDArray = vars.get(&quot;LoginUserIDArray&quot;).split(&apos;,&apos;);
+	var loginEmailBase64Array = vars.get(&quot;LoginEmailArrayBase64&quot;).split(&apos;,&apos;);
+	var index = getRandomInt(loginEmailArray.length);
+	vars.put(&quot;GetUserInfoByID_UserNameSearchListBase64&quot;, loginEmailBase64Array[index]);
+	vars.put(&quot;GetUserInfoByID_UserIDSearchList&quot;, loginUserIDArray[index]);
+	vars.put(&quot;GetUserInfoByID_UserNameSearchList&quot;, loginEmailArray[index]);
+}
+
+PreParamGetUserInfoByID();</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetUserInfoByID" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+	&quot;IsO365&quot;: ${Is365},&#xd;
+	&quot;UserID&quot;: &quot;${GetUserInfoByID_UserIDSearchList}&quot;,&#xd;
+	&quot;UserName&quot;: &quot;${GetUserInfoByID_UserNameSearchListBase64}&quot;,&#xd;
+	&quot;TokenDelegatedPermission&quot;: &quot;${TokenDelegatedPermission}&quot;&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/Refactor/api/${apiversion}/${appname}/GetUserInfoByID</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">400</stringProp>
+              <stringProp name="RandomTimer.range">400</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetConfig" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+	&quot;LoginEmail&quot;: &quot;${GetUserInfoByID_UserNameSearchList}&quot;&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/Refactor/api/${apiversion}/${appname}/GetConfig</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">400</stringProp>
+              <stringProp name="RandomTimer.range">400</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
         <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteGetAllFloorplan" enabled="true">
           <boolProp name="IfController.evaluateAll">false</boolProp>
           <boolProp name="IfController.useExpression">true</boolProp>
@@ -3693,6 +3868,9 @@ function PrepareUserAccount()
 	var index = getRandomInt(loginEmailArray.length);
 	vars.put(&quot;ListAppointmentPaggingByResourceAgenda_UserNameSearchList&quot;, loginEmailArray[index]);
 	vars.put(&quot;ListAppointmentPaggingByResourceAgenda_UserIDSearchList&quot;, loginUserIDArray[index]);
+	
+	vars.put(&quot;UserNameSearchList&quot;, loginEmailArray[index]);
+	vars.put(&quot;UserIDSearchList&quot;, loginUserIDArray[index]);
 }
 
 PrepareUserAccount();</stringProp>
@@ -3853,6 +4031,7 @@ function HandleResponse()
 				vars.put(&quot;appointmentDetail_IsAllDayEvent&quot;, appointmentDetail.IsAllDayEvent);		
 				vars.put(&quot;appointmentDetail_Booked&quot;, appointmentDetail.Booked);
 				vars.put(&quot;appointmentDetail_ResourceEmail&quot;, appointmentDetail.ResourceModel.Email);
+				vars.put(&quot;appointmentDetail_ResourceTypeId&quot;, appointmentDetail.ResourceModel.ResourceTypesModel.Id);
 				
 				vars.put(&quot;appointmentDetail_StartTime_Year&quot;, appointmentDetail.StartTime.getFullYear());
 				vars.put(&quot;appointmentDetail_StartTime_Month&quot;, appointmentDetail.StartTime.getMonth() + 1);
@@ -4021,6 +4200,7 @@ function HandleResponse()
 				vars.put(&quot;appointmentDetail_IsAllDayEvent&quot;, appointmentDetail.IsAllDayEvent);		
 				vars.put(&quot;appointmentDetail_Booked&quot;, appointmentDetail.Booked);
 				vars.put(&quot;appointmentDetail_ResourceEmail&quot;, appointmentDetail.ResourceModel.Email);
+				vars.put(&quot;appointmentDetail_ResourceTypeId&quot;, appointmentDetail.ResourceModel.ResourceTypesModel.Id);
 				
 				vars.put(&quot;appointmentDetail_StartTime_Year&quot;, appointmentDetail.StartTime.getFullYear());
 				vars.put(&quot;appointmentDetail_StartTime_Month&quot;, appointmentDetail.StartTime.getMonth() + 1);
@@ -4219,6 +4399,7 @@ function HandleResponse()
 				vars.put(&quot;appointmentDetail_IsAllDayEvent&quot;, appointmentDetail.IsAllDayEvent);		
 				vars.put(&quot;appointmentDetail_Booked&quot;, appointmentDetail.Booked);
 				vars.put(&quot;appointmentDetail_ResourceEmail&quot;, appointmentDetail.ResourceModel.Email);
+				vars.put(&quot;appointmentDetail_ResourceTypeId&quot;, appointmentDetail.ResourceModel.ResourceTypesModel.Id);
 				
 				vars.put(&quot;appointmentDetail_StartTime_Year&quot;, appointmentDetail.StartTime.getFullYear());
 				vars.put(&quot;appointmentDetail_StartTime_Month&quot;, appointmentDetail.StartTime.getMonth() + 1);
@@ -4407,6 +4588,7 @@ function HandleResponse()
 				vars.put(&quot;appointmentDetail_IsAllDayEvent&quot;, appointmentDetail.IsAllDayEvent);		
 				vars.put(&quot;appointmentDetail_Booked&quot;, appointmentDetail.Booked);
 				vars.put(&quot;appointmentDetail_ResourceEmail&quot;, appointmentDetail.ResourceModel.Email);
+				vars.put(&quot;appointmentDetail_ResourceTypeId&quot;, appointmentDetail.ResourceModel.ResourceTypesModel.Id);
 				
 				vars.put(&quot;appointmentDetail_StartTime_Year&quot;, appointmentDetail.StartTime.getFullYear());
 				vars.put(&quot;appointmentDetail_StartTime_Month&quot;, appointmentDetail.StartTime.getMonth() + 1);
@@ -4895,6 +5077,65 @@ PreParamUpdateSingleAppointment();</stringProp>
               </JSR223PreProcessor>
               <hashTree/>
             </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ActionHistory" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+    &quot;TypeOfAction&quot;: 3,&#xd;
+    &quot;ResourceEmail&quot;: &quot;${appointmentDetail_ResourceEmail}&quot;,&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DeviceStartTime_Year_Update},&#xd;
+        &quot;Month&quot;: ${DeviceStartTime_Month_Update},&#xd;
+        &quot;Day&quot;: ${DeviceStartTime_Day_Update},&#xd;
+        &quot;Hour&quot;: ${DeviceStartTime_Hours_Update},&#xd;
+        &quot;Minute&quot;: ${DeviceStartTime_Minutes_Update},&#xd;
+        &quot;Second&quot;: ${DeviceStartTime_Seconds_Update}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DeviceEndTime_Year_Update},&#xd;
+        &quot;Month&quot;: ${DeviceEndTime_Month_Update},&#xd;
+        &quot;Day&quot;: ${DeviceEndTime_Day_Update},&#xd;
+        &quot;Hour&quot;: ${DeviceEndTime_Hours_Update},&#xd;
+        &quot;Minute&quot;: ${DeviceEndTime_Minutes_Update},&#xd;
+        &quot;Second&quot;: ${DeviceEndTime_Seconds_Update}&#xd;
+    },&#xd;
+    &quot;Status&quot;: 0,&#xd;
+    &quot;OrganizerEmail&quot;: &quot;${UserNameSearchList}&quot;,&#xd;
+    &quot;ResourceTypeId&quot;: ${appointmentDetail_ResourceTypeId},&#xd;
+    &quot;Subject&quot;: &quot;${SubjectUpdate}&quot;,&#xd;
+    &quot;ResourceID&quot;: ${appointmentDetail_ResourceId},&#xd;
+    &quot;DetailMessage&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">/${sitename}/Refactor/api/${apiversion}/${appname}/ActionHistory</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                <stringProp name="ConstantTimer.delay">300</stringProp>
+                <stringProp name="RandomTimer.range">200</stringProp>
+              </UniformRandomTimer>
+              <hashTree/>
+            </hashTree>
           </hashTree>
         </hashTree>
         <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteDeleteAppointment" enabled="true">
@@ -4978,6 +5219,65 @@ PreParamUpdateSingleAppointment();</stringProp>
             <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="DeleteTime" enabled="true">
               <stringProp name="ConstantTimer.delay">1000</stringProp>
               <stringProp name="RandomTimer.range">2000</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ActionHistory" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+    &quot;TypeOfAction&quot;: 6,&#xd;
+    &quot;ResourceEmail&quot;: &quot;${appointmentDetail_ResourceEmail}&quot;,&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${appointmentDetail_DeviceStartTime_Year},&#xd;
+        &quot;Month&quot;: ${appointmentDetail_DeviceStartTime_Month},&#xd;
+        &quot;Day&quot;: ${appointmentDetail_DeviceStartTime_Day},&#xd;
+        &quot;Hour&quot;: ${appointmentDetail_DeviceStartTime_Hours},&#xd;
+        &quot;Minute&quot;: ${appointmentDetail_DeviceStartTime_Minutes},&#xd;
+        &quot;Second&quot;: ${appointmentDetail_DeviceStartTime_Seconds}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${appointmentDetail_DeviceEndTime_Year},&#xd;
+        &quot;Month&quot;: ${appointmentDetail_DeviceEndTime_Month},&#xd;
+        &quot;Day&quot;: ${appointmentDetail_DeviceEndTime_Day},&#xd;
+        &quot;Hour&quot;: ${appointmentDetail_DeviceEndTime_Hours},&#xd;
+        &quot;Minute&quot;: ${appointmentDetail_DeviceEndTime_Minutes},&#xd;
+        &quot;Second&quot;: ${appointmentDetail_DeviceEndTime_Seconds}&#xd;
+    },&#xd;
+    &quot;Status&quot;: 0,&#xd;
+    &quot;OrganizerEmail&quot;: &quot;${UserNameSearchList}&quot;,&#xd;
+    &quot;ResourceTypeId&quot;: ${appointmentDetail_ResourceTypeId},&#xd;
+    &quot;Subject&quot;: &quot;${appointmentDetail_Subject}&quot;,&#xd;
+    &quot;ResourceID&quot;: ${appointmentDetail_ResourceId},&#xd;
+    &quot;DetailMessage&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/Refactor/api/${apiversion}/${appname}/ActionHistory</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">300</stringProp>
+              <stringProp name="RandomTimer.range">200</stringProp>
             </UniformRandomTimer>
             <hashTree/>
           </hashTree>
