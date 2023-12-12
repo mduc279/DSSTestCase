@@ -275,6 +275,16 @@
             <stringProp name="Argument.name">LoginEmailArrayBase64</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="SearchResource_ResourceType" elementType="Argument">
+            <stringProp name="Argument.name">SearchResource_ResourceType</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="SearchAttendees_Text" elementType="Argument">
+            <stringProp name="Argument.name">SearchAttendees_Text</stringProp>
+            <stringProp name="Argument.value">mt@</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -1958,21 +1968,6 @@ vars.put(&apos;utcTimeRunTestPlan_Seconds&apos;, timeRunTestPlan.getSeconds());<
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-          <collectionProp name="Arguments.arguments">
-            <elementProp name="SearchResource_ResourceType" elementType="Argument">
-              <stringProp name="Argument.name">SearchResource_ResourceType</stringProp>
-              <stringProp name="Argument.metadata">=</stringProp>
-              <stringProp name="Argument.value">1</stringProp>
-            </elementProp>
-            <elementProp name="SearchAttendees_Text" elementType="Argument">
-              <stringProp name="Argument.name">SearchAttendees_Text</stringProp>
-              <stringProp name="Argument.value">mt@</stringProp>
-              <stringProp name="Argument.metadata">=</stringProp>
-            </elementProp>
-          </collectionProp>
-        </Arguments>
-        <hashTree/>
         <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam" enabled="true">
           <stringProp name="scriptLanguage">javascript</stringProp>
           <stringProp name="parameters"></stringProp>
