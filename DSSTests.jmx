@@ -216,6 +216,11 @@
             <stringProp name="Argument.value">0</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="TimeZoneHourDifferent" elementType="Argument">
+            <stringProp name="Argument.value">(UTC+07:00)</stringProp>
+            <stringProp name="Argument.name">TimeZoneHourDifferent</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -283,6 +288,46 @@
           <elementProp name="SearchAttendees_Text" elementType="Argument">
             <stringProp name="Argument.name">SearchAttendees_Text</stringProp>
             <stringProp name="Argument.value">mt@</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="DSClient_variable" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="DeviceID" elementType="Argument">
+            <stringProp name="Argument.name">DeviceID</stringProp>
+            <stringProp name="Argument.value">48411ad3c1g9</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="DeviceName" elementType="Argument">
+            <stringProp name="Argument.name">DeviceName</stringProp>
+            <stringProp name="Argument.value">tlm</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TemplateName" elementType="Argument">
+            <stringProp name="Argument.name">TemplateName</stringProp>
+            <stringProp name="Argument.value">Shine (1280x800) 4.3.6 English.xml</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="indexRoomStart" elementType="Argument">
+            <stringProp name="Argument.name">indexRoomStart</stringProp>
+            <stringProp name="Argument.value">3020</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="SearchResourceDssClient_Text" elementType="Argument">
+            <stringProp name="Argument.name">SearchResourceDssClient_Text</stringProp>
+            <stringProp name="Argument.value">room302</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="Is365DssClient" elementType="Argument">
+            <stringProp name="Argument.name">Is365DssClient</stringProp>
+            <stringProp name="Argument.value">true</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TimeSpanDssClient" elementType="Argument">
+            <stringProp name="Argument.name">TimeSpanDssClient</stringProp>
+            <stringProp name="Argument.value">15</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -2077,7 +2122,7 @@ function Prepare()
 	var IsExecuteGetAllFloorplanToCreateReservation = false;
 	var IsExecuteGetFloorplanById = false;
 	var searchFloorId = props.get(&quot;SearchFloorId&quot;);
-	log.info(&quot;tlminh: &quot; + searchFloorId);
+	
 	var isExecuteGetCategories = false;
 	switch(valExecuteGetFloorplan)
 	{
@@ -2327,8 +2372,13 @@ function HandleResponse()
 		if(countResources &gt; 0)
 		{						
 			var resourceBook = listResource[getRandomInt(countResources)];
-			isExecuteCheckBookAbleResource = true;
-			isExecuteGetEndTimeAvailableResource = true;
+			
+			if(getRandomInt(4) == 0)
+			{
+				isExecuteCheckBookAbleResource = true;
+				isExecuteGetEndTimeAvailableResource = true;
+			}
+			
 			vars.put(&quot;CheckBookableResource_Email&quot;, resourceBook.Email);
 			vars.put(&quot;CheckBookableResource_ResourceTypeId&quot;, resourceBook.ResourceType);
 			vars.put(&quot;CheckBookableResource_ResourceId&quot;, resourceBook.Id);
@@ -2485,7 +2535,10 @@ HandleResponse();
               <stringProp name="parameters"></stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="cacheKey">true</stringProp>
-              <stringProp name="script">
+              <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 function HandleResponse()
 {
 	var isExecuteCheckBookAbleResource = false;
@@ -2494,7 +2547,10 @@ function HandleResponse()
 		var resourceBook = JSON.parse(prev.getResponseDataAsString());	
 		if(resourceBook &amp;&amp; resourceBook.ResourceTypesModel)
 		{
-			isExecuteCheckBookAbleResource = true;
+			if(getRandomInt(4) == 0)
+			{
+				isExecuteCheckBookAbleResource = true;
+			}
 		
 			vars.put(&quot;CheckBookableResource_Email&quot;, resourceBook.Email);
 			vars.put(&quot;CheckBookableResource_ResourceTypeId&quot;, resourceBook.ResourceTypesModel.Id);
@@ -2748,8 +2804,10 @@ function HandleResponse()
 		if(countResources &gt; 0)
 		{						
 			var resourceBook = listResourceOnFloorlan[getRandomInt(countResources)];
-			isExecuteCheckBookAbleResource = true;
-			isExecuteSearchResourceByResourceId = true;
+			if(getRandomInt(4) == 1){
+				isExecuteCheckBookAbleResource = true;
+				isExecuteSearchResourceByResourceId = true;
+			}
 			
 			vars.put(&quot;CheckBookableResource_Email&quot;, resourceBook.Email);
 			vars.put(&quot;CheckBookableResource_ResourceTypeId&quot;, resourceBook.ResourceTypeID);
@@ -5722,6 +5780,2058 @@ vars.put(&apos;SelectMeetingByColleague_UTCSecondsNow&apos;, dateNowUTCObject.ge
             </UniformRandomTimer>
             <hashTree/>
           </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DssClient-Init-DoorSign" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">10</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam" enabled="true">
+          <stringProp name="scriptLanguage">javascript</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function preParam()
+{
+	var indexDevice = ${__threadNum};
+	var indexStart = parseInt(vars.get(&quot;indexRoomStart&quot;));
+	var macAddress = &quot;macAddress&quot; + (indexDevice + indexStart);
+	var resourceEmail = &quot;room&quot; + (indexDevice + indexStart)  + &quot;_staod.onmicrosoft.com&quot;;
+	var roomName = &quot;room&quot; + (indexDevice + indexStart);
+
+	var timeNow = new Date();
+	var monthNow = timeNow.getMonth() + 1;
+	var dateNow = timeNow.getDate();
+	var hourNow = timeNow.getHours();
+	var secondNow = timeNow.getSeconds();
+	var minutesNow = timeNow.getMinutes();
+	
+	monthNow = monthNow &lt; 10 ? &quot;0&quot; + monthNow : monthNow;
+	dateNow = dateNow &lt; 10 ? &quot;0&quot; + dateNow : dateNow;
+	hourNow = hourNow &lt; 10 ? &quot;0&quot; + hourNow : hourNow;
+	secondNow = secondNow &lt; 10 ? &quot;0&quot; + secondNow : secondNow;
+	minutesNow = minutesNow &lt; 10 ? &quot;0&quot; + minutesNow : minutesNow;
+	
+	var monthUTCNow = timeNow.getUTCMonth() + 1;
+	var dateUTCNow = timeNow.getUTCDate();
+	var hourUTCNow = timeNow.getUTCHours();
+	var secondUTCNow = timeNow.getUTCSeconds();
+	var minutesUTCNow = timeNow.getUTCMinutes();
+	
+	monthUTCNow = monthUTCNow &lt; 10 ? &quot;0&quot; + monthUTCNow : monthUTCNow;
+	dateUTCNow = dateUTCNow &lt; 10 ? &quot;0&quot; + dateUTCNow : dateUTCNow;
+	hourUTCNow = hourUTCNow &lt; 10 ? &quot;0&quot; + hourUTCNow : hourUTCNow;
+	secondUTCNow = secondUTCNow &lt; 10 ? &quot;0&quot; + secondUTCNow : secondUTCNow;
+	minutesUTCNow = minutesUTCNow &lt; 10 ? &quot;0&quot; + minutesUTCNow : minutesUTCNow;
+	
+	var timeNowString = timeNow.getFullYear()  + &quot;-&quot; + monthNow + &quot;-&quot; + dateNow + &quot; &quot; + hourNow + &quot;:&quot; + minutesNow + &quot;:&quot; + secondNow;
+	var timeUTCNowString = timeNow.getUTCFullYear()  + &quot;-&quot; + monthUTCNow + &quot;-&quot; + dateUTCNow + &quot; &quot; + hourUTCNow + &quot;:&quot; + minutesUTCNow + &quot;:&quot; + secondUTCNow;
+	
+
+	vars.put(&quot;TimeNowString&quot;, timeNowString);
+	vars.put(&quot;TimeUTCNowString&quot;, timeUTCNowString);
+	vars.put(&quot;ResourceEmail&quot;, resourceEmail);
+	vars.put(&quot;MacAddress&quot;, macAddress);
+	vars.put(&quot;RoomName&quot;,roomName);
+
+
+	var valSwitch = getRandomInt(6);
+	var isExecutePrepareForCreateAppointment = false;
+	switch(valSwitch)
+	{
+		case 0:
+			isExecutePrepareForCreateAppointment = true;		
+			break;
+		default:
+			break;
+	}
+
+	vars.put(&quot;isExecutePrepareForCreateAppointment&quot;, isExecutePrepareForCreateAppointment);
+	
+}
+
+preParam();</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SearchResourceByKeyBoard" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;LoginEmail&quot;: &quot;${loginemail}&quot;,&#xd;
+    &quot;UserName&quot;: &quot;${loginemail}&quot;,&#xd;
+    &quot;Name&quot;: &quot;${SearchResourceDssClient_Text}&quot;,&#xd;
+    &quot;ResourceType&quot;: ${SearchResource_ResourceType},&#xd;
+    &quot;Is365&quot;: ${Is365DssClient},&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${BookParam_StartTime_UTCYear},&#xd;
+        &quot;Month&quot;: ${BookParam_StartTime_UTCMonth},&#xd;
+        &quot;Day&quot;: ${BookParam_StartTime_UTCDate},&#xd;
+        &quot;Hour&quot;: ${BookParam_StartTime_UTCHours},&#xd;
+        &quot;Minute&quot;: ${BookParam_StartTime_UTCMinutes},&#xd;
+        &quot;Second&quot;: ${BookParam_StartTime_UTCSeconds}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${BookParam_EndTime_UTCYear},&#xd;
+        &quot;Month&quot;: ${BookParam_EndTime_UTCMonth},&#xd;
+        &quot;Day&quot;: ${BookParam_EndTime_UTCDate},&#xd;
+        &quot;Hour&quot;: ${BookParam_EndTime_UTCHours},&#xd;
+        &quot;Minute&quot;: ${BookParam_EndTime_UTCMinutes},&#xd;
+        &quot;Second&quot;: ${BookParam_EndTime_UTCSeconds}&#xd;
+    },&#xd;
+    &quot;IsAllDay&quot;: false,&#xd;
+    &quot;FlooplanId&quot;: 0,&#xd;
+    &quot;ListCategory&quot;: null,&#xd;
+    &quot;ConditionFilterCategory&quot;: 1,&#xd;
+    &quot;ConditionFilterCapacity&quot;: 1,&#xd;
+    &quot;CapacityValue&quot;: 0&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/Refactor/api/${apiversion}/${appname}/SearchResource</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="HandleSearchResource" enabled="true">
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function HandleResponse()
+{
+	var isExecuteSimulateDevice = false;
+	if(prev.getResponseDataAsString())
+	{
+		var listResource = JSON.parse(prev.getResponseDataAsString());
+		var countResources = listResource.length;
+		var resourceName = vars.get(&quot;RoomName&quot;);
+		if(countResources &gt; 0)
+		{			
+			var resource = null;
+			for(var i = 0; i &lt; listResource.length; i++){			
+				if(listResource[i].AccountName.contains(resourceName))
+				{
+					resource = listResource[i];
+				}
+			}
+
+			if(resource != null)
+			{
+				isExecuteSimulateDevice = true;
+				vars.put(&quot;ResouceDssClient_UserID&quot;, resource.UserID);
+			}
+		}
+	}
+
+	vars.put(&quot;isExecuteSimulateDevice&quot;, isExecuteSimulateDevice);
+}
+
+HandleResponse();
+
+
+</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="SearchResourceTime" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">0</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamSearchResource" enabled="true">
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">function PreParamSearchResource() 
+{
+	var startTime = new Date(new Date(vars.get(&quot;utcTimeRunTestPlan_Year&quot;),vars.get(&quot;utcTimeRunTestPlan_Month&quot;)-1,vars.get(&quot;utcTimeRunTestPlan_Date&quot;),vars.get(&quot;utcTimeRunTestPlan_Hours&quot;),vars.get(&quot;utcTimeRunTestPlan_Minutes&quot;),vars.get(&quot;utcTimeRunTestPlan_Seconds&quot;)).getTime() + parseInt(props.get(&quot;TimeSpanToNextBookTime&quot;))*60*1000);
+	var endTime = new Date(new Date(vars.get(&quot;utcTimeRunTestPlan_Year&quot;),vars.get(&quot;utcTimeRunTestPlan_Month&quot;)-1,vars.get(&quot;utcTimeRunTestPlan_Date&quot;),vars.get(&quot;utcTimeRunTestPlan_Hours&quot;),vars.get(&quot;utcTimeRunTestPlan_Minutes&quot;),vars.get(&quot;utcTimeRunTestPlan_Seconds&quot;)).getTime() + parseInt(props.get(&quot;TimeSpanToNextBookTime&quot;))*60*1000 + parseInt(vars.get(&quot;TimeSpan&quot;))*60*1000);
+	
+	vars.put(&apos;BookParam_StartTime_Date&apos;, startTime.getDate());
+	vars.put(&apos;BookParam_StartTime_Month&apos;, startTime.getMonth() + 1);
+	vars.put(&apos;BookParam_StartTime_Year&apos;, startTime.getFullYear());
+	vars.put(&apos;BookParam_StartTime_Hours&apos;, startTime.getHours());
+	vars.put(&apos;BookParam_StartTime_Minutes&apos;, startTime.getMinutes());
+	vars.put(&apos;BookParam_StartTime_Seconds&apos;, startTime.getSeconds());
+	
+	vars.put(&apos;BookParam_StartTime_UTCDate&apos;, startTime.getUTCDate());
+	vars.put(&apos;BookParam_StartTime_UTCMonth&apos;, startTime.getUTCMonth() + 1);
+	vars.put(&apos;BookParam_StartTime_UTCYear&apos;, startTime.getUTCFullYear());
+	vars.put(&apos;BookParam_StartTime_UTCHours&apos;, startTime.getUTCHours());
+	vars.put(&apos;BookParam_StartTime_UTCMinutes&apos;, startTime.getUTCMinutes());
+	vars.put(&apos;BookParam_StartTime_UTCSeconds&apos;, startTime.getUTCSeconds());
+
+	vars.put(&apos;BookParam_EndTime_Date&apos;, endTime.getDate());
+	vars.put(&apos;BookParam_EndTime_Month&apos;, endTime.getMonth() + 1);
+	vars.put(&apos;BookParam_EndTime_Year&apos;, endTime.getFullYear());
+	vars.put(&apos;BookParam_EndTime_Hours&apos;, endTime.getHours());
+	vars.put(&apos;BookParam_EndTime_Minutes&apos;, endTime.getMinutes());
+	vars.put(&apos;BookParam_EndTime_Seconds&apos;, endTime.getSeconds());
+	
+	vars.put(&apos;BookParam_EndTime_UTCDate&apos;, endTime.getUTCDate());
+	vars.put(&apos;BookParam_EndTime_UTCMonth&apos;, endTime.getUTCMonth() + 1);
+	vars.put(&apos;BookParam_EndTime_UTCYear&apos;, endTime.getUTCFullYear());
+	vars.put(&apos;BookParam_EndTime_UTCHours&apos;, endTime.getUTCHours());
+	vars.put(&apos;BookParam_EndTime_UTCMinutes&apos;, endTime.getUTCMinutes());
+	vars.put(&apos;BookParam_EndTime_UTCSeconds&apos;, endTime.getUTCSeconds());
+}
+
+PreParamSearchResource();</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SaveSettingClient" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;DeviceID&quot;: &quot;${MacAddress}&quot;,&#xd;
+	&quot;DeviceName&quot;: &quot;${MacAddress}&quot;   &#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/SaveSettingClient</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+            <stringProp name="RandomTimer.range">111</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetConfigClientAccess" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetConfigClientAccess</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">100</stringProp>
+            <stringProp name="RandomTimer.range">111</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteSimulateDevice" enabled="true">
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+          <stringProp name="IfController.condition">${isExecuteSimulateDevice}</stringProp>
+        </IfController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SendHeartBeat-old" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+  &quot;MacAddress&quot;: &quot;${MacAddress}&quot;,&#xd;
+  &quot;HeartBeatData&quot;: &quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;utf-8\&quot;?&gt;\n&lt;HeartBeat xmlns:xsd=\&quot;http://www.w3.org/2001/XMLSchema\&quot; xmlns:xsi=\&quot;http://www.w3.org/2001/XMLSchema-instance\&quot;&gt;\n  &lt;ClientDateModified&gt;${TimeUTCNowString}&lt;/ClientDateModified&gt;\n  &lt;Manufacturer&gt;OnePlus&lt;/Manufacturer&gt;\n  &lt;Platform&gt;Android 7.1.1&lt;/Platform&gt;\n  &lt;DeviceType&gt;Tablet&lt;/DeviceType&gt;\n  &lt;DeviceID&gt;48411ad3c1g9&lt;/DeviceID&gt;\n  &lt;DeviceTime&gt;${TimeNowString}&lt;/DeviceTime&gt;\n  &lt;DeviceBaseUtcOffset&gt;(UTC+07:00)&lt;/DeviceBaseUtcOffset&gt;\n  &lt;DeviceStandardName&gt;Asia/Bangkok&lt;/DeviceStandardName&gt;\n  &lt;DeviceIP&gt;172.18.36.75&lt;/DeviceIP&gt;\n  &lt;DeviceWidth&gt;1600&lt;/DeviceWidth&gt;\n  &lt;DeviceHeight&gt;900&lt;/DeviceHeight&gt;\n  &lt;Model&gt;ONEPLUS A5000&lt;/Model&gt;\n  &lt;DSSClientVersion&gt;4.3.8105&lt;/DSSClientVersion&gt;\n  &lt;Resources&gt;\n    &lt;Resource&gt;\n      &lt;RoomName /&gt;\n      &lt;RoomEmail /&gt;\n    &lt;/Resource&gt;\n  &lt;/Resources&gt;\n  &lt;ConfigurationManagedBy&gt;Server&lt;/ConfigurationManagedBy&gt;\n  &lt;TemplateName /&gt;\n  &lt;IsRemoteTemplate&gt;False&lt;/IsRemoteTemplate&gt;\n  &lt;DSSTemplateSupportedVersion&gt;1.0,4.0,4.1.0,4.1.3,4.2.0,4.3.0,4.3.1,4.3.2,4.3.3,4.3.4,4.3.5,4.3.6&lt;/DSSTemplateSupportedVersion&gt;\n  &lt;DSSConfigurationSupportedVersion&gt;1.0,4.0,4.1.0,4.1.3,4.2.0,4.3.0,4.3.1,4.3.2,4.3.3,4.3.4,4.3.5,4.3.6&lt;/DSSConfigurationSupportedVersion&gt;\n&lt;/HeartBeat&gt;&quot;,&#xd;
+  &quot;DeviceName&quot;: &quot;${MacAddress}&quot;,&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/irestdigitalsignservice/SendHeartBeat</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AppoveDeviceJemeter" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+    &quot;ServerName&quot;: null,&#xd;
+    &quot;ManagedBy&quot;: null,&#xd;
+    &quot;TimeZone&quot;: null,&#xd;
+    &quot;Name&quot;: null,&#xd;
+    &quot;Version&quot;: &quot;4.3.6&quot;,&#xd;
+    &quot;PowerUp&quot;: &quot;2023-12-14T00:00:00&quot;,&#xd;
+    &quot;PowerDown&quot;: &quot;2023-12-14T00:00:00&quot;,&#xd;
+    &quot;PowerUpMinute&quot;: 0,&#xd;
+    &quot;PowerDownMinute&quot;: 0,&#xd;
+    &quot;PowerOptions&quot;: false,&#xd;
+    &quot;FilterLanguage&quot;: &quot;English&quot;,&#xd;
+    &quot;IsRemoteTemplate&quot;: true,&#xd;
+    &quot;FilterScreenSize&quot;: &quot;1280x800&quot;,&#xd;
+    &quot;Template&quot;: &quot;${TemplateName}&quot;,&#xd;
+    &quot;Background&quot;: &quot;FromTemplate&quot;,&#xd;
+    &quot;Logo&quot;: &quot;FromTemplate&quot;,&#xd;
+    &quot;IsGroupByRoomName&quot;: false,&#xd;
+    &quot;ShowRoomOption&quot;: &quot;ShowAllRooms&quot;,&#xd;
+    &quot;SlidePageTime&quot;: 15,&#xd;
+    &quot;ResourceName&quot;: null,&#xd;
+    &quot;ResourceEmail&quot;: null,&#xd;
+    &quot;UserID&quot;: null,&#xd;
+    &quot;IsGroupByRoomNameFloorPlan&quot;: false,&#xd;
+    &quot;ShowRoomOptionFloorPlan&quot;: &quot;ShowAllRooms&quot;,&#xd;
+    &quot;SlidePageTimeFloorPlan&quot;: 15,&#xd;
+    &quot;SignType&quot;: &quot;DoorSignInteractive&quot;,&#xd;
+    &quot;IsEnableConfirm&quot;: false,&#xd;
+    &quot;ConfirmTimeLimit&quot;: 15,&#xd;
+    &quot;DateTimeFormat&quot;: &quot;FromSystem&quot;,&#xd;
+    &quot;DateFormat&quot;: &quot;ddd, MMM d, yyyy&quot;,&#xd;
+    &quot;TimeFormat&quot;: &quot;HH:mm&quot;,&#xd;
+    &quot;PasswordForOptionScreen&quot;: null,&#xd;
+    &quot;BookingTimeStep&quot;: ${TimeSpanDssClient},&#xd;
+    &quot;TreatMeeting&quot;: 5,&#xd;
+    &quot;LogActivity&quot;: &quot;Error&quot;,&#xd;
+    &quot;RollOnOffset&quot;: 0,&#xd;
+    &quot;PollRate&quot;: 30,&#xd;
+    &quot;IsKioskMode&quot;: false,&#xd;
+    &quot;ViewMode&quot;: 1,&#xd;
+    &quot;DefaultView&quot;: &quot;FloorMap&quot;,&#xd;
+    &quot;DefaultLocationId&quot;: 0,&#xd;
+    &quot;IsAutoUpgrade&quot;: false,&#xd;
+    &quot;IsTouch&quot;: false,&#xd;
+    &quot;IsKeyboard&quot;: false,&#xd;
+    &quot;IsCardReader&quot;: false,&#xd;
+    &quot;IsPersonalID&quot;: false,&#xd;
+    &quot;IsEnabledAddNewNFCCard&quot;: false,&#xd;
+    &quot;IsSubLocation&quot;: false,&#xd;
+    &quot;VersionNumber&quot;: 0,&#xd;
+    &quot;TemplateSupportedVersion&quot;: null,&#xd;
+    &quot;Groupid&quot;: 0,&#xd;
+    &quot;FloorPlanId&quot;: 0,&#xd;
+    &quot;MacAdress&quot;: &quot;${MacAddress}&quot;,&#xd;
+    &quot;ConfigurationMangedBy&quot;: &quot;Server&quot;,&#xd;
+    &quot;ListResources&quot;: null,&#xd;
+    &quot;ListResourcesMeetingDirectorySign&quot;: null,&#xd;
+    &quot;ListResourcesFloorPlanSign&quot;: null,&#xd;
+    &quot;ListDateTimeFormat&quot;: null,&#xd;
+    &quot;ListBookingTimeStep&quot;: null,&#xd;
+    &quot;DoorSign&quot;: {&#xd;
+        &quot;UserID&quot;: &quot;${ResouceDssClient_UserID}&quot;,&#xd;
+        &quot;IsDigitalSign&quot;: false,&#xd;
+        &quot;RoomSchedule&quot;: &quot;http://192.168.1.79/DigitalSignService/Clients/Signs/Schedule/Schedule_${RoomName}_staod.onmicrosoft.com.xml&quot;,&#xd;
+        &quot;RoomName&quot;: &quot;${RoomName}&quot;,&#xd;
+        &quot;RoomEmail&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+        &quot;RoomAccoutName&quot;: null,&#xd;
+        &quot;ExchangeWebServiceURL&quot;: &quot;https://graph.microsoft.com/v1.0/users/${ResouceDssClient_UserID}/calendarView/delta?&quot;,&#xd;
+        &quot;CasName&quot;: null,&#xd;
+        &quot;CasIP&quot;: null,&#xd;
+        &quot;IsEnableConfirm&quot;: false,&#xd;
+        &quot;ConfirmTimeLimit&quot;: 0,&#xd;
+        &quot;PowerOptions&quot;: false,&#xd;
+        &quot;OpenTime&quot;: &quot;2023-12-12T00:00:00+07:00&quot;,&#xd;
+        &quot;PowerDownMinute&quot;: 0,&#xd;
+        &quot;CloseTime&quot;: &quot;2023-12-12T00:00:00+07:00&quot;,&#xd;
+        &quot;PowerUpMinute&quot;: 0,&#xd;
+        &quot;RoomId&quot;: 0,&#xd;
+        &quot;IsDSS&quot;: false,&#xd;
+        &quot;IsWorkspace&quot;: false,&#xd;
+        &quot;IsPooled&quot;: false,&#xd;
+        &quot;IsO365&quot;: false,&#xd;
+        &quot;IsDirectory&quot;: false,&#xd;
+        &quot;IsKiosk&quot;: false,&#xd;
+        &quot;DomainID&quot;: 0,&#xd;
+        &quot;ResourceType&quot;: 0,&#xd;
+        &quot;IsVR&quot;: false,&#xd;
+        &quot;Type&quot;: null,&#xd;
+        &quot;TypeString&quot;: null&#xd;
+    },&#xd;
+    &quot;ListMeetingDirectorySign&quot;: null,&#xd;
+    &quot;ListFloorPlanSign&quot;: null,&#xd;
+    &quot;ListResourceSorts&quot;: &quot;0, 1, 2, 3, 4&quot;,&#xd;
+    &quot;ListResourceSortsFloorPlan&quot;: &quot;0, 1, 2, 3, 4&quot;,&#xd;
+    &quot;ListSignType&quot;: null,&#xd;
+    &quot;ListConfigurationManagedBy&quot;: null,&#xd;
+    &quot;ListFilterScreenSize&quot;: null,&#xd;
+    &quot;ListTemplate&quot;: null,&#xd;
+    &quot;ListLanguageTemplate&quot;: null,&#xd;
+    &quot;ListBackground&quot;: null,&#xd;
+    &quot;ListLogo&quot;: null,&#xd;
+    &quot;ListTreatMeeting&quot;: null,&#xd;
+    &quot;ListLogActivity&quot;: null,&#xd;
+    &quot;ListRollonoffset&quot;: null,&#xd;
+    &quot;ListShowRoomOption&quot;: null,&#xd;
+    &quot;ListShowRoomOptionFloorPlan&quot;: null,&#xd;
+    &quot;ListVersion&quot;: null,&#xd;
+    &quot;ListDefaultView&quot;: null,&#xd;
+    &quot;ListSortOrderAppointment&quot;: null,&#xd;
+    &quot;ListSortOrderAppointmentFloorPlan&quot;: null,&#xd;
+    &quot;ResourceStr&quot;: &quot;16&quot;,&#xd;
+    &quot;DeviceName&quot;: &quot;${MacAddress}&quot;,&#xd;
+    &quot;PowerDownAfterLastEndTime&quot;: 5,&#xd;
+    &quot;IsFilterClientVersion&quot;: false,&#xd;
+    &quot;InputMode&quot;: 4,&#xd;
+    &quot;ListInputMode&quot;: null,&#xd;
+    &quot;IsRunningLog&quot;: false,&#xd;
+    &quot;IsRunningScreenShot&quot;: false,&#xd;
+    &quot;HourFormat24&quot;: null&#xd;
+}&#xd;
+</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/AppoveDeviceJemeter</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">1000</stringProp>
+              <stringProp name="RandomTimer.range">111</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+          <stringProp name="ConstantTimer.delay">3000</stringProp>
+          <stringProp name="RandomTimer.range">100.0</stringProp>
+        </UniformRandomTimer>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DSSClient" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <intProp name="LoopController.loops">-1</intProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">9</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam" enabled="true">
+          <stringProp name="scriptLanguage">javascript</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function preParam()
+{
+	var indexDevice = ${__threadNum};
+	var indexStart = parseInt(vars.get(&quot;indexRoomStart&quot;));
+	var macAddress = &quot;macAddress&quot; + (indexDevice + indexStart);
+	var resourceEmail = &quot;room&quot; + (indexDevice + indexStart)  + &quot;_staod.onmicrosoft.com&quot;;
+	var roomName = &quot;room&quot; + (indexDevice + indexStart);
+	var loopIndex = vars.getIteration();
+	if(loopIndex == 1)
+	{
+		props.put(&quot;CanBookDssClient&quot; + indexDevice, true);
+		props.put(&quot;CanEditOrExtendDssClient&quot; + indexDevice, false);
+	}
+
+	var timeNow = new Date();
+	var monthNow = timeNow.getMonth() + 1;
+	var dateNow = timeNow.getDate();
+	var hourNow = timeNow.getHours();
+	var secondNow = timeNow.getSeconds();
+	var minutesNow = timeNow.getMinutes();
+	
+	monthNow = monthNow &lt; 10 ? &quot;0&quot; + monthNow : monthNow;
+	dateNow = dateNow &lt; 10 ? &quot;0&quot; + dateNow : dateNow;
+	hourNow = hourNow &lt; 10 ? &quot;0&quot; + hourNow : hourNow;
+	secondNow = secondNow &lt; 10 ? &quot;0&quot; + secondNow : secondNow;
+	minutesNow = minutesNow &lt; 10 ? &quot;0&quot; + minutesNow : minutesNow;
+	
+	var monthUTCNow = timeNow.getUTCMonth() + 1;
+	var dateUTCNow = timeNow.getUTCDate();
+	var hourUTCNow = timeNow.getUTCHours();
+	var secondUTCNow = timeNow.getUTCSeconds();
+	var minutesUTCNow = timeNow.getUTCMinutes();
+	
+	monthUTCNow = monthUTCNow &lt; 10 ? &quot;0&quot; + monthUTCNow : monthUTCNow;
+	dateUTCNow = dateUTCNow &lt; 10 ? &quot;0&quot; + dateUTCNow : dateUTCNow;
+	hourUTCNow = hourUTCNow &lt; 10 ? &quot;0&quot; + hourUTCNow : hourUTCNow;
+	secondUTCNow = secondUTCNow &lt; 10 ? &quot;0&quot; + secondUTCNow : secondUTCNow;
+	minutesUTCNow = minutesUTCNow &lt; 10 ? &quot;0&quot; + minutesUTCNow : minutesUTCNow;
+	
+	var timeNowString = timeNow.getFullYear()  + &quot;-&quot; + monthNow + &quot;-&quot; + dateNow + &quot; &quot; + hourNow + &quot;:&quot; + minutesNow + &quot;:&quot; + secondNow;
+	var timeUTCNowString = timeNow.getUTCFullYear()  + &quot;-&quot; + monthUTCNow + &quot;-&quot; + dateUTCNow + &quot; &quot; + hourUTCNow + &quot;:&quot; + minutesUTCNow + &quot;:&quot; + secondUTCNow;
+
+	var isExecuteCreateProblem = false;
+	var isExecuteSearchFloorplanOfKiosk = false;
+	
+
+	if(getRandomInt(14) == 0)
+	{
+		isExecuteCreateProblem = true;
+	}
+
+	if(getRandomInt(20) == 0)
+	{
+		isExecuteSearchFloorplanOfKiosk = true;
+	}
+
+	vars.put(&quot;TimeNowString&quot;, timeNowString);
+	vars.put(&quot;TimeUTCNowString&quot;, timeUTCNowString);
+	vars.put(&quot;ResourceEmail&quot;, resourceEmail);
+	vars.put(&quot;MacAddress&quot;, macAddress);
+	vars.put(&quot;RoomName&quot;,roomName);
+
+	vars.put(&quot;isExecuteCreateProblem&quot;, isExecuteCreateProblem);
+	vars.put(&quot;isExecuteSearchFloorplanOfKiosk&quot;, isExecuteSearchFloorplanOfKiosk);
+}
+
+preParam();</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="TimeLoop GetChageInfo" enabled="true">
+          <stringProp name="ConstantTimer.delay">1</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetChangeInfo" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">&#xd;
+{&#xd;
+	&quot;ResourceEventModified&quot;: [{&#xd;
+			&quot;EventDateModified&quot;: {&#xd;
+					&quot;Second&quot;: ${utcSecondsNow},&#xd;
+					&quot;Year&quot;: ${utcYearNow},&#xd;
+					&quot;Month&quot;: ${utcMonthNow},&#xd;
+					&quot;Day&quot;: ${utcDateNow},&#xd;
+					&quot;Hour&quot;: ${utcHourNow},&#xd;
+					&quot;Minute&quot;: ${utcMinutesNow}&#xd;
+			},&#xd;
+			&quot;ResourceEmail&quot;: &quot;${ResourceEmail}&quot;&#xd;
+		}&#xd;
+	],&#xd;
+	&quot;TemplateName&quot;: &quot;${TemplateName}&quot;,&#xd;
+	&quot;TemplateModifiedDate&quot;: {&#xd;
+		&quot;Second&quot;: ${utcSecondsNow},&#xd;
+		&quot;Year&quot;: ${utcYearNow},&#xd;
+		&quot;Month&quot;: ${utcMonthNow},&#xd;
+		&quot;Day&quot;: ${utcDateNow},&#xd;
+		&quot;Hour&quot;: ${utcHourNow},&#xd;
+		&quot;Minute&quot;: ${utcMinutesNow}&#xd;
+	},&#xd;
+	&quot;MacAddress&quot;: &quot;${MacAddress}&quot;,&#xd;
+	&quot;ClientDateModified&quot;: {&#xd;
+		&quot;Second&quot;: ${utcSecondsNow},&#xd;
+		&quot;Year&quot;: ${utcYearNow},&#xd;
+		&quot;Month&quot;: ${utcMonthNow},&#xd;
+		&quot;Day&quot;: ${utcDateNow},&#xd;
+		&quot;Hour&quot;: ${utcHourNow},&#xd;
+		&quot;Minute&quot;: ${utcMinutesNow}&#xd;
+	},&#xd;
+	&quot;DeviceTime&quot;: &quot;${TimeNowString}&quot;,&#xd;
+	&quot;DeviceBaseUtcOffset&quot;: &quot;${TimeZoneHourDifferent}&quot;,&#xd;
+	&quot;DeviceStandardName&quot;: &quot;${TimeZone}&quot;&#xd;
+}&#xd;
+&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetChangeInfo</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">500</stringProp>
+            <stringProp name="RandomTimer.range">111</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="HandleGetChangeInfo" enabled="true">
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function HandleGetChangeInfo(){
+
+	var loopIndex = vars.getIteration();
+	var isExecuteGetEventFile = false;
+
+	if(loopIndex != 1 &amp;&amp; prev.getResponseDataAsString())
+	{
+		var res = JSON.parse(prev.getResponseDataAsString());
+		
+		if((res &amp;&amp; res.Change &amp;&amp; res.Change.length &gt; 9 &amp;&amp; res.Change[8] == 1) || (getRandomInt(8) == 0))
+		{
+			log.info(res.Change);
+			isExecuteGetEventFile = true;
+		}
+	}
+	else if(loopIndex == 1)
+	{
+		isExecuteGetEventFile = true;
+	}
+
+	vars.put(&quot;isExecuteGetEventFile&quot;, isExecuteGetEventFile);
+}
+
+HandleGetChangeInfo();</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteCreateProblem" enabled="true">
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+          <stringProp name="IfController.condition">${isExecuteCreateProblem}</stringProp>
+        </IfController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetProblemListByResourceEmail" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+    &quot;ListResourceEmail&quot;: [&quot;${RoomName}@staod.onmicrosoft.com&quot;]&#xd;
+}&#xd;
+</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetProblemListByResourceEmail</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CreateReportProblem" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+    &quot;ListReportTypeId&quot;: &quot;&quot;,&#xd;
+    &quot;Comments&quot;: &quot;${RoomName}&quot;,&#xd;
+    &quot;DeviceID&quot;: &quot;${MacAddress}&quot;,&#xd;
+    &quot;ListResource&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+    &quot;CreateDate&quot;: {&#xd;
+        &quot;Year&quot;: ${CreateProblem_Year},&#xd;
+        &quot;Month&quot;: ${CreateProblem_Month},&#xd;
+        &quot;Day&quot;: ${CreateProblem_Date},&#xd;
+        &quot;Hour&quot;: ${CreateProblem_Hour},&#xd;
+        &quot;Minute&quot;: ${CreateProblem_Minutes},&#xd;
+        &quot;Second&quot;: ${CreateProblem_Seconds}&#xd;
+    },&#xd;
+    &quot;Organizer&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/CreateReportProblem</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam CreateProblem" enabled="true">
+              <stringProp name="scriptLanguage">javascript</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">function PreParam()
+{
+	var dateNow = new Date();
+	
+	vars.put(&apos;CreateProblem_Date&apos;, dateNow.getUTCDate());
+	vars.put(&apos;CreateProblem_Month&apos;, dateNow.getUTCMonth() + 1);
+	vars.put(&apos;CreateProblem_Year&apos;, dateNow.getUTCFullYear());
+	vars.put(&apos;CreateProblem_Hour&apos;, dateNow.getUTCHours());
+	vars.put(&apos;CreateProblem_Minutes&apos;, dateNow.getUTCMinutes());
+	vars.put(&apos;CreateProblem_Seconds&apos;, dateNow.getUTCSeconds());
+}
+
+PreParam();</stringProp>
+            </JSR223PreProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteGetEventFile" enabled="true">
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+          <stringProp name="IfController.condition">${isExecuteGetEventFile}</stringProp>
+        </IfController>
+        <hashTree>
+          <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <boolProp name="HTTPSampler.image_parser">true</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+            <collectionProp name="urls"/>
+          </com.blazemeter.jmeter.http.ParallelHTTPSampler>
+          <hashTree>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">1000</stringProp>
+            </ConstantTimer>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Schedule" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/DigitalSignService/Clients/Signs/Schedule/Schedule_${RoomName}_staod.onmicrosoft.com.xml</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="EventFile" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/DigitalSignService/Clients/Signs/Events/${RoomName}_staod.onmicrosoft.com.xml?t=1703047400392</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="ListStartTime" enabled="true">
+              <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
+              <stringProp name="BoundaryExtractor.refname">ListStartTime</stringProp>
+              <stringProp name="BoundaryExtractor.lboundary">&lt;Starttime&gt;</stringProp>
+              <stringProp name="BoundaryExtractor.rboundary">&lt;/Starttime&gt;</stringProp>
+              <stringProp name="BoundaryExtractor.default"></stringProp>
+              <boolProp name="BoundaryExtractor.default_empty_value">false</boolProp>
+              <stringProp name="BoundaryExtractor.match_number">-1</stringProp>
+            </BoundaryExtractor>
+            <hashTree/>
+            <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="ListEndTime" enabled="true">
+              <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
+              <stringProp name="BoundaryExtractor.refname">ListEndTime</stringProp>
+              <stringProp name="BoundaryExtractor.lboundary">&lt;Endtime&gt;</stringProp>
+              <stringProp name="BoundaryExtractor.rboundary">&lt;/Endtime&gt;</stringProp>
+              <stringProp name="BoundaryExtractor.default"></stringProp>
+              <boolProp name="BoundaryExtractor.default_empty_value">false</boolProp>
+              <stringProp name="BoundaryExtractor.match_number">-1</stringProp>
+            </BoundaryExtractor>
+            <hashTree/>
+            <BoundaryExtractor guiclass="BoundaryExtractorGui" testclass="BoundaryExtractor" testname="ListEventID" enabled="true">
+              <stringProp name="BoundaryExtractor.useHeaders">false</stringProp>
+              <stringProp name="BoundaryExtractor.refname">ListEventID</stringProp>
+              <stringProp name="BoundaryExtractor.lboundary">&lt;EventID&gt;</stringProp>
+              <stringProp name="BoundaryExtractor.rboundary">&lt;/EventID&gt;</stringProp>
+              <stringProp name="BoundaryExtractor.default"></stringProp>
+              <boolProp name="BoundaryExtractor.default_empty_value">false</boolProp>
+              <stringProp name="BoundaryExtractor.match_number">-1</stringProp>
+            </BoundaryExtractor>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="HandleEventFile" enabled="true">
+              <stringProp name="scriptLanguage">javascript</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
+function strToDate(dtStr) {
+  if (!dtStr) 
+	  return null;
+  var splitParts = dtStr.split(&quot; &quot;);
+  var dateParts = splitParts[0].split(&quot;-&quot;);
+  var timeParts = splitParts[1].split(&quot;:&quot;);
+  
+  return dateObject = new Date(parseInt(dateParts[2]),parseInt(dateParts[0])-1,parseInt(dateParts[1]),parseInt(timeParts[0]),parseInt(timeParts[1]),parseInt(timeParts[2]));
+}
+
+function handleEventFile()
+{
+	var indexDevice = ${__threadNum};
+	var index = 1;
+	var isExecuteBookAppointment = true;
+	var isExecuteEndOrExtendAppointment = true;
+	var switchVal = getRandomInt(4);
+	var loopIndex = vars.getIteration();
+	while(vars.get(&quot;ListStartTime_&quot; + index) != null) 
+	{
+		var startUTCTimeString = vars.get(&quot;ListStartTime_&quot; + index);
+		var endUTCTimeString = vars.get(&quot;ListEndTime_&quot; + index);
+		var startUTCTime = strToDate(startUTCTimeString);
+		var endUTCTime = strToDate(endUTCTimeString);
+
+		var nowDate = new Date();
+		var UTCNow = new Date(nowDate.getUTCFullYear(), nowDate.getUTCMonth(), nowDate.getUTCDate(), nowDate.getUTCHours(), nowDate.getUTCMinutes(), nowDate.getUTCSeconds());
+
+		if(UTCNow.getTime() &lt; endUTCTime.getTime() &amp;&amp; startUTCTime.getTime() &lt; UTCNow.getTime())
+		{
+			isExecuteBookAppointment = false;
+
+			vars.put(&apos;TimeOccupied_Start_Date&apos;, startUTCTime.getDate());
+			vars.put(&apos;TimeOccupied_Start_Month&apos;, startUTCTime.getMonth() + 1);
+			vars.put(&apos;TimeOccupied_Start_Year&apos;, startUTCTime.getFullYear());
+			vars.put(&apos;TimeOccupied_Start_Hour&apos;, startUTCTime.getHours());
+			vars.put(&apos;TimeOccupied_Start_Minutes&apos;, startUTCTime.getMinutes());
+			vars.put(&apos;TimeOccupied_Start_Seconds&apos;, startUTCTime.getSeconds());
+
+			vars.put(&apos;TimeOccupied_End_Date&apos;, endUTCTime.getDate());
+			vars.put(&apos;TimeOccupied_End_Month&apos;, endUTCTime.getMonth() + 1);
+			vars.put(&apos;TimeOccupied_End_Year&apos;, endUTCTime.getFullYear());
+			vars.put(&apos;TimeOccupied_End_Hour&apos;, endUTCTime.getHours());
+			vars.put(&apos;TimeOccupied_End_Minutes&apos;, endUTCTime.getMinutes());
+			vars.put(&apos;TimeOccupied_End_Seconds&apos;, endUTCTime.getSeconds());
+			
+			var indexSearchDummy = 1;
+			while(vars.get(&quot;ListStartTime_&quot; + indexSearchDummy) != null) 
+			{
+				var eventId = vars.get(&quot;ListEventID_&quot; + indexSearchDummy);
+				var startUTCTimeStringSearchDummy = vars.get(&quot;ListStartTime_&quot; + indexSearchDummy);
+				var endUTCTimeStringSearchDummy = vars.get(&quot;ListEndTime_&quot; + indexSearchDummy);
+				if(startUTCTimeString &amp;&amp; endUTCTimeString &amp;&amp; startUTCTimeStringSearchDummy == startUTCTimeString &amp;&amp; endUTCTimeString == endUTCTimeStringSearchDummy)
+				{
+					vars.put(&quot;AppointmentNow_EventId&quot;, vars.get(&quot;ListEventID_&quot; + indexSearchDummy));
+				}
+				
+				if(eventId &amp;&amp; eventId.contains(&quot;DSSDUMMY&quot;))
+				{
+					isExecuteEndOrExtendAppointment = false;
+				}
+				indexSearchDummy++;
+			}
+		}
+		index++;
+	}
+
+	
+	if(isExecuteEndOrExtendAppointment &amp;&amp; !isExecuteBookAppointment)
+	{
+		isExecuteEndOrExtendAppointment = true;
+	}
+	else
+	{
+		isExecuteEndOrExtendAppointment = false;
+	}
+
+	log.info(isExecuteBookAppointment);
+	props.put(&quot;CanBookDssClient&quot; + indexDevice, isExecuteBookAppointment);
+	props.put(&quot;CanEditOrExtendDssClient&quot; + indexDevice, isExecuteEndOrExtendAppointment);
+}
+
+handleEventFile();</stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="IsExecuteActionOnDssClient" enabled="true">
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+          <stringProp name="IfController.condition">true</stringProp>
+        </IfController>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam_IsExecuteActionOnDssClient" enabled="true">
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">function PreParam()
+{
+	var loopIndex = vars.getIteration();
+	var indexDevice = ${__threadNum};
+	var CanBookDssClient = props.get(&quot;CanBookDssClient&quot; + indexDevice);
+	var CanEditOrExtendDssClient	=  props.get(&quot;CanEditOrExtendDssClient&quot; + indexDevice);
+	
+	vars.put(&quot;isExecuteEndOrExtendAppointment&quot;, CanEditOrExtendDssClient);
+	vars.put(&quot;isExecuteBookAppointment&quot;, CanBookDssClient);
+}
+
+PreParam();</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <boolProp name="HTTPSampler.image_parser">true</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+            <collectionProp name="urls"/>
+          </com.blazemeter.jmeter.http.ParallelHTTPSampler>
+          <hashTree/>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteEndOrExtendAppointment" enabled="true">
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+            <stringProp name="IfController.condition">${isExecuteEndOrExtendAppointment}</stringProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListVisibleResourceByMacAddress" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+  &quot;MacAddress&quot;: &quot;${MacAddress}&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListVisibleResourceByMacAddress</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                <stringProp name="ConstantTimer.delay">500</stringProp>
+                <stringProp name="RandomTimer.range">200</stringProp>
+              </UniformRandomTimer>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetListVisibleResourceByMacAddress-1" enabled="true">
+                <stringProp name="scriptLanguage">javascript</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">function handleResponse()
+{
+	if(prev.getResponseDataAsString())
+	{
+		var response = JSON.parse(prev.getResponseDataAsString());
+		var isExecuteValidateOpeningHourResource = false;
+		if(response &amp;&amp; response.length &gt; 0 &amp;&amp; response[0].AccountName)
+		{
+			isExecuteValidateOpeningHourResource = true;	
+		}
+	}
+
+	vars.put(&quot;isExecuteValidateOpeningHourResource&quot;, isExecuteValidateOpeningHourResource);
+}
+
+handleResponse();</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteValidateOpeningHourResource" enabled="true">
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+              <stringProp name="IfController.condition">${isExecuteValidateOpeningHourResource}</stringProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ValidateOpeningHourResource" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+  &quot;StartDate&quot;: {&#xd;
+    &quot;Year&quot;: ${ValidateOpeningHourResource_1_YearNow},&#xd;
+    &quot;Month&quot;: ${ValidateOpeningHourResource_1_MonthNow},&#xd;
+    &quot;Day&quot;: ${ValidateOpeningHourResource_1_DateNow},&#xd;
+    &quot;Hour&quot;: ${ValidateOpeningHourResource_1_HourNow},&#xd;
+    &quot;Minute&quot;: ${ValidateOpeningHourResource_1_MinutesNow}&#xd;
+  },&#xd;
+  &quot;EndDate&quot;: {&#xd;
+    &quot;Year&quot;: ${ValidateOpeningHourResource_1_YearNow},&#xd;
+    &quot;Month&quot;: ${ValidateOpeningHourResource_1_MonthNow},&#xd;
+    &quot;Day&quot;: ${ValidateOpeningHourResource_1_DateNow},&#xd;
+    &quot;Hour&quot;: ${ValidateOpeningHourResource_1_HourNow},&#xd;
+    &quot;Minute&quot;: ${ValidateOpeningHourResource_1_MinutesNow}&#xd;
+  },&#xd;
+  &quot;Timezone&quot;: &quot;${TimeZone}&quot;&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ValidateOpeningHourResource</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam-ValidateOpeningHourResource-1" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function PreParam()
+{
+	var dateNow= new Date();
+	
+	vars.put(&apos;ValidateOpeningHourResource_1_DateNow&apos;, dateNow.getDate());
+	vars.put(&apos;ValidateOpeningHourResource_1_MonthNow&apos;, dateNow.getMonth() + 1);
+	vars.put(&apos;ValidateOpeningHourResource_1_YearNow&apos;, dateNow.getFullYear());
+	vars.put(&apos;ValidateOpeningHourResource_1_HourNow&apos;, dateNow.getHours());
+	vars.put(&apos;ValidateOpeningHourResource_1_MinutesNow&apos;, dateNow.getMinutes());
+	vars.put(&apos;ValidateOpeningHourResource_1_SecondsNow&apos;, dateNow.getSeconds());
+}
+
+PreParam();</stringProp>
+                </JSR223PreProcessor>
+                <hashTree/>
+                <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">500</stringProp>
+                  <stringProp name="RandomTimer.range">200</stringProp>
+                </UniformRandomTimer>
+                <hashTree/>
+                <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Handle-ValidateOpeningHourResource-1" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function handleResponse()
+{
+	var isNextAction_End = false;
+	var isNextAction_Extend = false;
+	var valSwitch = getRandomInt(6);
+	if(prev.getResponseDataAsString())
+	{
+		var response = JSON.parse(prev.getResponseDataAsString());
+		if(response &amp;&amp; !response.StatusCode)
+		{
+			switch(valSwitch)
+			{
+				case 0:
+					isNextAction_End = true;
+					break;
+				case 1:
+				case 2:
+				case 3:
+					isNextAction_Extend = true;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	var startTime = new Date();
+
+	var startTimeHourOccupied = vars.get(&quot;TimeOccupied_Start_Hour&quot;);
+	var startTimeMinutesOccupied = vars.get(&quot;TimeOccupied_Start_Minutes&quot;);
+
+	if(isNextAction_End &amp;&amp; (startTimeHourOccupied &lt; startTime.getUTCHours() || startTimeMinutesOccupied &lt; startTime.getUTCMinutes())){
+		isNextAction_End = true;
+	}
+	else
+	{
+		isNextAction_End = false;
+	}
+
+	vars.put(&quot;isNextAction_End&quot;, isNextAction_End);
+	vars.put(&quot;isNextAction_Extend&quot;, isNextAction_Extend);
+}
+
+handleResponse();</stringProp>
+                </JSR223PostProcessor>
+                <hashTree/>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_End" enabled="true">
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+                <stringProp name="IfController.condition">${isNextAction_End}</stringProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="EndMeeting" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+    &quot;EmailAddress&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${TimeOccupied_Start_Year},&#xd;
+        &quot;Month&quot;: ${TimeOccupied_Start_Month},&#xd;
+        &quot;Day&quot;: ${TimeOccupied_Start_Date},&#xd;
+        &quot;Hour&quot;: ${TimeOccupied_Start_Hour},&#xd;
+        &quot;Minute&quot;: ${TimeOccupied_Start_Minutes},&#xd;
+        &quot;Second&quot;: ${TimeOccupied_Start_Seconds}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${TimeOccupied_End_Year},&#xd;
+        &quot;Month&quot;: ${TimeOccupied_End_Month},&#xd;
+        &quot;Day&quot;: ${TimeOccupied_End_Date},&#xd;
+        &quot;Hour&quot;: ${TimeOccupied_End_Hour},&#xd;
+        &quot;Minute&quot;: ${TimeOccupied_End_Minutes},&#xd;
+        &quot;Second&quot;: ${TimeOccupied_End_Seconds}&#xd;
+    },&#xd;
+    &quot;ExpectedEndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${EndMeeting_StartTime_Year},&#xd;
+        &quot;Month&quot;: ${EndMeeting_StartTime_Month},&#xd;
+        &quot;Day&quot;: ${EndMeeting_StartTime_Date},&#xd;
+        &quot;Hour&quot;: ${EndMeeting_StartTime_Hour},&#xd;
+        &quot;Minute&quot;: ${EndMeeting_StartTime_Minutes},&#xd;
+        &quot;Second&quot;: ${EndMeeting_StartTime_Seconds}&#xd;
+    },&#xd;
+    &quot;NfcCardId&quot;: null,&#xd;
+    &quot;DeviceID&quot;: &quot;${MacAddress}&quot;,&#xd;
+    &quot;IsNotConfirm&quot;: false,&#xd;
+    &quot;EventID&quot;: &quot;${AppointmentNow_EventId}&quot;,&#xd;
+    &quot;Timezone&quot;: &quot;${TimeZone}&quot;,&#xd;
+    &quot;TokenDelegatedPermission&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/EndMeeting</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamEndMeeting" enabled="true">
+                    <stringProp name="scriptLanguage">javascript</stringProp>
+                    <stringProp name="parameters"></stringProp>
+                    <stringProp name="filename"></stringProp>
+                    <stringProp name="cacheKey">true</stringProp>
+                    <stringProp name="script">function PreParamEndMeeting()
+{
+	var startTime = new Date();
+	
+	vars.put(&apos;EndMeeting_StartTime_Date&apos;, startTime.getUTCDate());
+	vars.put(&apos;EndMeeting_StartTime_Month&apos;, startTime.getUTCMonth() + 1);
+	vars.put(&apos;EndMeeting_StartTime_Year&apos;, startTime.getUTCFullYear());
+	vars.put(&apos;EndMeeting_StartTime_Hour&apos;, startTime.getUTCHours());
+	vars.put(&apos;EndMeeting_StartTime_Minutes&apos;, startTime.getUTCMinutes());
+	vars.put(&apos;EndMeeting_StartTime_Seconds&apos;, startTime.getUTCSeconds());
+
+
+}
+
+PreParamEndMeeting();</stringProp>
+                  </JSR223PreProcessor>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_Extend" enabled="true">
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+                <stringProp name="IfController.condition">${isNextAction_Extend}</stringProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ExtendMeeting" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+    &quot;EmailAddress&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${TimeOccupied_Start_Year},&#xd;
+        &quot;Month&quot;: ${TimeOccupied_Start_Month},&#xd;
+        &quot;Day&quot;: ${TimeOccupied_Start_Date},&#xd;
+        &quot;Hour&quot;: ${TimeOccupied_Start_Hour},&#xd;
+        &quot;Minute&quot;: ${TimeOccupied_Start_Minutes},&#xd;
+        &quot;Second&quot;: ${TimeOccupied_Start_Seconds}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${TimeOccupied_End_Year},&#xd;
+        &quot;Month&quot;: ${TimeOccupied_End_Month},&#xd;
+        &quot;Day&quot;: ${TimeOccupied_End_Date},&#xd;
+        &quot;Hour&quot;: ${TimeOccupied_End_Hour},&#xd;
+        &quot;Minute&quot;: ${TimeOccupied_End_Minutes},&#xd;
+        &quot;Second&quot;: ${TimeOccupied_End_Seconds}&#xd;
+    },&#xd;
+		&quot;Minutes&quot;: ${MinutesExtend},&#xd;
+    &quot;NfcCardId&quot;: null,&#xd;
+    &quot;DeviceID&quot;: &quot;${MacAddress}&quot;,&#xd;
+    &quot;EventID&quot;: &quot;${AppointmentNow_EventId}&quot;,&#xd;
+    &quot;Timezone&quot;: &quot;${TimeZone}&quot;,&#xd;
+    &quot;TokenDelegatedPermission&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ExtendMeeting</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamExtendMeeting" enabled="true">
+                    <stringProp name="scriptLanguage">javascript</stringProp>
+                    <stringProp name="parameters"></stringProp>
+                    <stringProp name="filename"></stringProp>
+                    <stringProp name="cacheKey">true</stringProp>
+                    <stringProp name="script">function PreParamExtendMeeting(){
+	var TimeOccupied_Start_Date = vars.get(&apos;TimeOccupied_Start_Date&apos;);
+	var TimeOccupied_Start_Month = vars.get(&apos;TimeOccupied_Start_Month&apos;);
+	var TimeOccupied_Start_Year = vars.get(&apos;TimeOccupied_Start_Year&apos;);
+	var TimeOccupied_Start_Hour = vars.get(&apos;TimeOccupied_Start_Hour&apos;);
+	var TimeOccupied_Start_Minutes = vars.get(&apos;TimeOccupied_Start_Minutes&apos;);
+	var TimeOccupied_Start_Seconds = vars.get(&apos;TimeOccupied_Start_Seconds&apos;);
+
+	var TimeOccupied_End_Date = vars.get(&apos;TimeOccupied_End_Date&apos;);
+	var TimeOccupied_End_Month = vars.get(&apos;TimeOccupied_End_Month&apos;);
+	var TimeOccupied_End_Year = vars.get(&apos;TimeOccupied_End_Year&apos;);
+	var TimeOccupied_End_Hour = vars.get(&apos;TimeOccupied_End_Hour&apos;);
+	var TimeOccupied_End_Minutes = vars.get(&apos;TimeOccupied_End_Minutes&apos;);
+	var TimeOccupied_End_Seconds = vars.get(&apos;TimeOccupied_End_Seconds&apos;);
+
+	var TimeOccupied_End = new Date(TimeOccupied_End_Year, TimeOccupied_End_Month - 1, TimeOccupied_End_Year, TimeOccupied_End_Hour, TimeOccupied_End_Minutes, TimeOccupied_End_Seconds);
+
+	var TimeExtend = new Date(TimeOccupied_End.getTime() + 60*1000*parseInt(vars.get(&quot;TimeSpanDssClient&quot;)));
+
+	vars.put(&quot;MinutesExtend&quot;, vars.get(&quot;TimeSpanDssClient&quot;));
+}
+
+PreParamExtendMeeting();
+</stringProp>
+                  </JSR223PreProcessor>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteBookAppointment" enabled="true">
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+            <stringProp name="IfController.condition">${isExecuteBookAppointment}</stringProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListVisibleResourceByMacAddress" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+  &quot;MacAddress&quot;: &quot;${MacAddress}&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListVisibleResourceByMacAddress</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                <stringProp name="ConstantTimer.delay">500</stringProp>
+                <stringProp name="RandomTimer.range">200</stringProp>
+              </UniformRandomTimer>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetListVisibleResourceByMacAddress-2" enabled="true">
+                <stringProp name="scriptLanguage">javascript</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">function handleResponse()
+{
+	if(prev.getResponseDataAsString())
+	{
+		var response = JSON.parse(prev.getResponseDataAsString());
+		var isExecuteValidateOpeningHourResource = false;
+		if(response &amp;&amp; response.length &gt; 0 &amp;&amp; response[0].AccountName)
+		{
+			isExecuteValidateOpeningHourResource = true;	
+		}
+	}
+
+	vars.put(&quot;isExecuteValidateOpeningHourResource&quot;, isExecuteValidateOpeningHourResource);
+}
+
+handleResponse();</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetSubjectList" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetSubjectList</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                <stringProp name="ConstantTimer.delay">500</stringProp>
+                <stringProp name="RandomTimer.range">200</stringProp>
+              </UniformRandomTimer>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetSubjectList-1" enabled="true">
+                <stringProp name="scriptLanguage">javascript</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function handleResponse()
+{
+	if(prev.getResponseDataAsString())
+	{
+		var response = JSON.parse(prev.getResponseDataAsString());
+		if(response &amp;&amp; response.length &gt; 0)
+		{
+		 	vars.put(&quot;NameAppoinemnt&quot;, response[getRandomInt(response.length)].Name);
+		}
+	}
+}
+
+handleResponse();</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteValidateOpeningHourResource" enabled="true">
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+              <stringProp name="IfController.condition">${isExecuteValidateOpeningHourResource}</stringProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ValidateOpeningHourResource" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+  &quot;StartDate&quot;: {&#xd;
+    &quot;Year&quot;: ${ValidateOpeningHourResource_1_YearNow},&#xd;
+    &quot;Month&quot;: ${ValidateOpeningHourResource_1_MonthNow},&#xd;
+    &quot;Day&quot;: ${ValidateOpeningHourResource_1_DateNow},&#xd;
+    &quot;Hour&quot;: ${ValidateOpeningHourResource_1_HourNow},&#xd;
+    &quot;Minute&quot;: ${ValidateOpeningHourResource_1_MinutesNow}&#xd;
+  },&#xd;
+  &quot;EndDate&quot;: {&#xd;
+    &quot;Year&quot;: ${ValidateOpeningHourResource_1_YearNow},&#xd;
+    &quot;Month&quot;: ${ValidateOpeningHourResource_1_MonthNow},&#xd;
+    &quot;Day&quot;: ${ValidateOpeningHourResource_1_DateNow},&#xd;
+    &quot;Hour&quot;: ${ValidateOpeningHourResource_1_HourNow},&#xd;
+    &quot;Minute&quot;: ${ValidateOpeningHourResource_1_MinutesNow}&#xd;
+  },&#xd;
+  &quot;Timezone&quot;: &quot;${TimeZone}&quot;&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ValidateOpeningHourResource</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">500</stringProp>
+                  <stringProp name="RandomTimer.range">200</stringProp>
+                </UniformRandomTimer>
+                <hashTree/>
+                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam-ValidateOpeningHourResource-2" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function PreParam()
+{
+	var dateNow= new Date();
+	
+	vars.put(&apos;ValidateOpeningHourResource_1_DateNow&apos;, dateNow.getDate());
+	vars.put(&apos;ValidateOpeningHourResource_1_MonthNow&apos;, dateNow.getMonth() + 1);
+	vars.put(&apos;ValidateOpeningHourResource_1_YearNow&apos;, dateNow.getFullYear());
+	vars.put(&apos;ValidateOpeningHourResource_1_HourNow&apos;, dateNow.getHours());
+	vars.put(&apos;ValidateOpeningHourResource_1_MinutesNow&apos;, dateNow.getMinutes());
+	vars.put(&apos;ValidateOpeningHourResource_1_SecondsNow&apos;, dateNow.getSeconds());
+}
+
+PreParam();</stringProp>
+                </JSR223PreProcessor>
+                <hashTree/>
+                <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Handle-ValidateOpeningHourResource-2" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function handleResponse()
+{
+	var isNextAction_CreateAppointment = false;
+	if(prev.getResponseDataAsString())
+	{
+		var response = JSON.parse(prev.getResponseDataAsString());
+		if(response &amp;&amp; !response.StatusCode)
+		{
+			isNextAction_CreateAppointment = true;	
+		}
+	}
+
+	vars.put(&quot;isNextAction_CreateAppointment&quot;, isNextAction_CreateAppointment);
+}
+
+handleResponse();</stringProp>
+                </JSR223PostProcessor>
+                <hashTree/>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_CreateAppointment" enabled="true">
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+                <boolProp name="IfController.useExpression">true</boolProp>
+                <stringProp name="IfController.condition">${isNextAction_CreateAppointment}</stringProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CreateAppointment" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+	&quot;EmailAddress&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
+	&quot;StartTime&quot;: {&#xd;
+		&quot;Year&quot;: ${CreateAppointment_StartTime_Year},&#xd;
+		&quot;Month&quot;: ${CreateAppointment_StartTime_Month},&#xd;
+		&quot;Day&quot;: ${CreateAppointment_StartTime_Date},&#xd;
+		&quot;Hour&quot;: ${CreateAppointment_StartTime_Hour},&#xd;
+		&quot;Minute&quot;: ${CreateAppointment_StartTime_Minutes},&#xd;
+		&quot;Second&quot;: ${CreateAppointment_StartTime_Seconds}&#xd;
+	},&#xd;
+	&quot;EndTime&quot;: {&#xd;
+		&quot;Year&quot;: ${CreateAppointment_EndTime_YearNow},&#xd;
+		&quot;Month&quot;: ${CreateAppointment_EndTime_MonthNow},&#xd;
+		&quot;Day&quot;: ${CreateAppointment_EndTime_DateNow},&#xd;
+		&quot;Hour&quot;: ${CreateAppointment_EndTime_HourNow},&#xd;
+		&quot;Minute&quot;: ${CreateAppointment_EndTime_MinutesNow},&#xd;
+		&quot;Second&quot;: ${CreateAppointment_EndTime_SecondsNow}&#xd;
+	},&#xd;
+	&quot;SubjectMeeting&quot;: &quot;${NameAppoinemnt}&quot;,&#xd;
+	&quot;NfcCardId&quot;: null,&#xd;
+	&quot;DeviceID&quot;: &quot;${MacAddress}&quot;,&#xd;
+	&quot;Timezone&quot;: &quot;${TimeZone}&quot;,&#xd;
+	&quot;TokenDelegatedPermission&quot;: &quot;&quot;&#xd;
+}&#xd;
+</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/CreateAppointment</stringProp>
+                  <stringProp name="HTTPSampler.method">POST</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                    <stringProp name="ConstantTimer.delay">1000</stringProp>
+                    <stringProp name="RandomTimer.range">3000</stringProp>
+                  </UniformRandomTimer>
+                  <hashTree/>
+                  <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam CreateAppointment" enabled="true">
+                    <stringProp name="scriptLanguage">javascript</stringProp>
+                    <stringProp name="parameters"></stringProp>
+                    <stringProp name="filename"></stringProp>
+                    <stringProp name="cacheKey">true</stringProp>
+                    <stringProp name="script">function PreParam()
+{
+	var dateNow = new Date();
+	var startTime = new Date(dateNow.getTime());
+	var endTime = new Date(dateNow.getTime() + parseInt(vars.get(&quot;TimeSpanDssClient&quot;))*60*1000);
+	
+	vars.put(&apos;CreateAppointment_StartTime_Date&apos;, startTime.getUTCDate());
+	vars.put(&apos;CreateAppointment_StartTime_Month&apos;, startTime.getUTCMonth() + 1);
+	vars.put(&apos;CreateAppointment_StartTime_Year&apos;, startTime.getUTCFullYear());
+	vars.put(&apos;CreateAppointment_StartTime_Hour&apos;, startTime.getUTCHours());
+	vars.put(&apos;CreateAppointment_StartTime_Minutes&apos;, startTime.getUTCMinutes());
+	vars.put(&apos;CreateAppointment_StartTime_Seconds&apos;, startTime.getUTCSeconds());
+
+	vars.put(&apos;CreateAppointment_EndTime_DateNow&apos;, endTime.getUTCDate());
+	vars.put(&apos;CreateAppointment_EndTime_MonthNow&apos;, endTime.getUTCMonth() + 1);
+	vars.put(&apos;CreateAppointment_EndTime_YearNow&apos;, endTime.getUTCFullYear());
+	vars.put(&apos;CreateAppointment_EndTime_HourNow&apos;, endTime.getUTCHours());
+	vars.put(&apos;CreateAppointment_EndTime_MinutesNow&apos;, endTime.getUTCMinutes());
+	vars.put(&apos;CreateAppointment_EndTime_SecondsNow&apos;, endTime.getUTCSeconds());
+}
+
+PreParam();</stringProp>
+                  </JSR223PreProcessor>
+                  <hashTree/>
+                </hashTree>
+                <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments"/>
+                  </elementProp>
+                  <boolProp name="HTTPSampler.image_parser">true</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+                  <collectionProp name="urls"/>
+                </com.blazemeter.jmeter.http.ParallelHTTPSampler>
+                <hashTree>
+                  <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                    <stringProp name="ConstantTimer.delay">5000</stringProp>
+                  </ConstantTimer>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DssClient-Kiosk-GetFloorplanInformation" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <intProp name="LoopController.loops">-1</intProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">20</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="preParam" enabled="true">
+          <stringProp name="scriptLanguage">javascript</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">function addDays(date, days) {
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
+function preParam()
+{
+	var dateNowUTCObject = new Date(new Date().setHours(0,0,0,0));
+	var endDayUTCObject = addDays(new Date(new Date().setHours(0,0,0,0)), 1);
+	var tomorrowUTCObject = addDays(new Date(new Date().setHours(0,0,0,0)), 1);
+	endDayUTCObject = new Date(endDayUTCObject.getTime() - 60*1000*1);
+	
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcDateNow&apos;, dateNowUTCObject.getUTCDate());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcMonthNow&apos;, dateNowUTCObject.getUTCMonth() + 1);
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcYearNow&apos;, dateNowUTCObject.getUTCFullYear());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcHourNow&apos;, dateNowUTCObject.getUTCHours());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcMinutesNow&apos;, dateNowUTCObject.getUTCMinutes());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcSecondsNow&apos;, dateNowUTCObject.getUTCSeconds());
+	
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcDateEndOfDay&apos;, endDayUTCObject.getUTCDate());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcMonthEndOfDay&apos;, endDayUTCObject.getUTCMonth() + 1);
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcYearEndOfDay&apos;, endDayUTCObject.getUTCFullYear());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcHourEndOfDay&apos;, endDayUTCObject.getUTCHours());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcMinutesEndOfDay&apos;, endDayUTCObject.getUTCMinutes());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcSecondsEndOfDay&apos;, endDayUTCObject.getUTCSeconds());
+
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcDateTomorrow&apos;, tomorrowUTCObject.getUTCDate());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcMonthTomorrow&apos;, tomorrowUTCObject.getUTCMonth() + 1);
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcYearTomorrow&apos;, tomorrowUTCObject.getUTCFullYear());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcHourTomorrow&apos;, tomorrowUTCObject.getUTCHours());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcMinutesTomorrow&apos;, tomorrowUTCObject.getUTCMinutes());
+	vars.put(&apos;DssClient_Kiosk_GetFloorplanInformation_utcSecondsTomorrow&apos;, tomorrowUTCObject.getUTCSeconds());
+}
+
+preParam();</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="FloorplanID_Local" elementType="Argument">
+              <stringProp name="Argument.name">FloorplanID_Local</stringProp>
+              <stringProp name="Argument.value">1</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="MacAddress" elementType="Argument">
+              <stringProp name="Argument.name">MacAddress</stringProp>
+              <stringProp name="Argument.value">48411ad3c1g9</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SearchFloorplan" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;FloorPlanStr&quot;:&quot;${FloorplanID_Local}&quot;,&#xd;
+	&quot;IncludeSubLocation&quot;:false&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/SearchFloorplan</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">1000</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetVisibleLocationByFloorplanId" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;FloorplanID&quot;: ${FloorplanID_Local}&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetVisibleLocationByFloorplanId</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">1000</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListResourceFloorplan" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;ResourceTypeID&quot;: 1,&#xd;
+    &quot;FlooplanID&quot;: ${FloorplanID_Local},&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcYearNow},&#xd;
+        &quot;Month&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMonthNow},&#xd;
+        &quot;Day&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcDateNow},&#xd;
+        &quot;Hour&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcHourNow},&#xd;
+        &quot;Minute&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMinutesNow},&#xd;
+        &quot;Second&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcSecondsNow}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcYearEndOfDay},&#xd;
+        &quot;Month&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMonthEndOfDay},&#xd;
+        &quot;Day&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcDateEndOfDay},&#xd;
+        &quot;Hour&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcHourEndOfDay},&#xd;
+        &quot;Minute&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMinutesEndOfDay},&#xd;
+        &quot;Second&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcSecondsEndOfDay}&#xd;
+    },&#xd;
+    &quot;IsAllDay&quot;: false,&#xd;
+    &quot;Is365&quot;: true&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListResourceFloorplan</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">1000</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListVisibleResourceKioskModeByMacAddress" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;MacAddress&quot;: &quot;${MacAddress}&quot;,&#xd;
+    &quot;FlooplanID&quot;: ${FloorplanID_Local},&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcYearNow},&#xd;
+        &quot;Month&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMonthNow},&#xd;
+        &quot;Day&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcDateNow},&#xd;
+        &quot;Hour&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcHourNow},&#xd;
+        &quot;Minute&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMinutesNow},&#xd;
+        &quot;Second&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcSecondsNow}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcYearTomorrow},&#xd;
+        &quot;Month&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMonthTomorrow},&#xd;
+        &quot;Day&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcDateTomorrow},&#xd;
+        &quot;Hour&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcHourTomorrow},&#xd;
+        &quot;Minute&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMinutesTomorrow},&#xd;
+        &quot;Second&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcSecondsTomorrow}&#xd;
+    },&#xd;
+    &quot;SignType&quot;: 5&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListVisibleResourceKioskModeByMacAddress</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">1000</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetFloorplanDetail" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;ResourceTypeID&quot;: 1,&#xd;
+    &quot;FlooplanID&quot;: ${FloorplanID_Local},&#xd;
+    &quot;StartTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcYearNow},&#xd;
+        &quot;Month&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMonthNow},&#xd;
+        &quot;Day&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcDateNow},&#xd;
+        &quot;Hour&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcHourNow},&#xd;
+        &quot;Minute&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMinutesNow},&#xd;
+        &quot;Second&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcSecondsNow}&#xd;
+    },&#xd;
+    &quot;EndTime&quot;: {&#xd;
+        &quot;Year&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcYearEndOfDay},&#xd;
+        &quot;Month&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMonthEndOfDay},&#xd;
+        &quot;Day&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcDateEndOfDay},&#xd;
+        &quot;Hour&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcHourEndOfDay},&#xd;
+        &quot;Minute&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcMinutesEndOfDay},&#xd;
+        &quot;Second&quot;: ${DssClient_Kiosk_GetFloorplanInformation_utcSecondsEndOfDay}&#xd;
+    },&#xd;
+    &quot;IsAllDay&quot;: false,&#xd;
+    &quot;Is365&quot;: true&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+          <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetFloorplanDetail</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+          <boolProp name="HTTPSampler.image_parser">false</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+          <boolProp name="HTTPSampler.md5">false</boolProp>
+          <intProp name="HTTPSampler.ipSourceType">0</intProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">1000</stringProp>
+            <stringProp name="RandomTimer.range">1000</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
         </hashTree>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
