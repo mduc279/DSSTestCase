@@ -6287,7 +6287,7 @@ PreParamSearchResource();</stringProp>
           <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">9</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -6296,12 +6296,25 @@ PreParamSearchResource();</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam" enabled="true">
-          <stringProp name="scriptLanguage">javascript</stringProp>
-          <stringProp name="parameters"></stringProp>
-          <stringProp name="filename"></stringProp>
-          <stringProp name="cacheKey">true</stringProp>
-          <stringProp name="script">function getRandomInt(max) {
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="TimeLoop GetChageInfo" enabled="true">
+          <stringProp name="ConstantTimer.delay">1</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+        <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <boolProp name="HTTPSampler.image_parser">true</boolProp>
+          <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+          <collectionProp name="urls"/>
+        </com.blazemeter.jmeter.http.ParallelHTTPSampler>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam" enabled="true">
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
@@ -6317,6 +6330,13 @@ function preParam()
 	{
 		props.put(&quot;CanBookDssClient&quot; + indexDevice, true);
 		props.put(&quot;CanEditOrExtendDssClient&quot; + indexDevice, false);
+		vars.put(&quot;CanBookDssClient&quot;, true);
+		vars.put(&quot;CanEditOrExtendDssClient&quot;, false);
+	}
+	else
+	{
+		vars.put(&quot;CanBookDssClient&quot;, props.get(&quot;CanBookDssClient&quot; + indexDevice));
+		vars.put(&quot;CanEditOrExtendDssClient&quot;, props.get(&quot;CanEditOrExtendDssClient&quot; + indexDevice));
 	}
 
 	var timeNow = new Date();
@@ -6348,17 +6368,10 @@ function preParam()
 	var timeUTCNowString = timeNow.getUTCFullYear()  + &quot;-&quot; + monthUTCNow + &quot;-&quot; + dateUTCNow + &quot; &quot; + hourUTCNow + &quot;:&quot; + minutesUTCNow + &quot;:&quot; + secondUTCNow;
 
 	var isExecuteCreateProblem = false;
-	var isExecuteSearchFloorplanOfKiosk = false;
-	
 
 	if(getRandomInt(14) == 0)
 	{
 		isExecuteCreateProblem = true;
-	}
-
-	if(getRandomInt(20) == 0)
-	{
-		isExecuteSearchFloorplanOfKiosk = true;
 	}
 
 	vars.put(&quot;TimeNowString&quot;, timeNowString);
@@ -6368,16 +6381,12 @@ function preParam()
 	vars.put(&quot;RoomName&quot;,roomName);
 
 	vars.put(&quot;isExecuteCreateProblem&quot;, isExecuteCreateProblem);
-	vars.put(&quot;isExecuteSearchFloorplanOfKiosk&quot;, isExecuteSearchFloorplanOfKiosk);
 }
 
 preParam();</stringProp>
-        </JSR223PreProcessor>
-        <hashTree/>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="TimeLoop GetChageInfo" enabled="true">
-          <stringProp name="ConstantTimer.delay">1</stringProp>
-        </ConstantTimer>
-        <hashTree/>
+          </JSR223PreProcessor>
+          <hashTree/>
+        </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetChangeInfo" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -6467,7 +6476,6 @@ function HandleGetChangeInfo(){
 		
 		if((res &amp;&amp; res.Change &amp;&amp; res.Change.length &gt; 9 &amp;&amp; res.Change[8] == 1) || (getRandomInt(8) == 0))
 		{
-			log.info(res.Change);
 			isExecuteGetEventFile = true;
 		}
 	}
@@ -6598,20 +6606,6 @@ PreParam();</stringProp>
           <stringProp name="IfController.condition">${isExecuteGetEventFile}</stringProp>
         </IfController>
         <hashTree>
-          <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <boolProp name="HTTPSampler.image_parser">true</boolProp>
-            <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
-            <collectionProp name="urls"/>
-          </com.blazemeter.jmeter.http.ParallelHTTPSampler>
-          <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">1000</stringProp>
-            </ConstantTimer>
-            <hashTree/>
-          </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Schedule" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -6771,9 +6765,9 @@ function handleEventFile()
 		isExecuteEndOrExtendAppointment = false;
 	}
 
-	log.info(isExecuteBookAppointment);
-	props.put(&quot;CanBookDssClient&quot; + indexDevice, isExecuteBookAppointment);
-	props.put(&quot;CanEditOrExtendDssClient&quot; + indexDevice, isExecuteEndOrExtendAppointment);
+	log.info(&quot;index&quot; + indexDevice + &quot;_&quot; + isExecuteBookAppointment);
+	vars.put(&quot;CanBookDssClient&quot;, isExecuteBookAppointment);
+	vars.put(&quot;CanEditOrExtendDssClient&quot;, isExecuteEndOrExtendAppointment);
 }
 
 handleEventFile();</stringProp>
@@ -6796,8 +6790,10 @@ handleEventFile();</stringProp>
 {
 	var loopIndex = vars.getIteration();
 	var indexDevice = ${__threadNum};
-	var CanBookDssClient = props.get(&quot;CanBookDssClient&quot; + indexDevice);
-	var CanEditOrExtendDssClient	=  props.get(&quot;CanEditOrExtendDssClient&quot; + indexDevice);
+	var CanBookDssClient = vars.get(&quot;CanBookDssClient&quot;);
+	var CanEditOrExtendDssClient	=  vars.get(&quot;CanEditOrExtendDssClient&quot;);
+	
+	log.info(&quot;After:&quot; + indexDevice + &quot;_&quot; + CanBookDssClient);
 	
 	vars.put(&quot;isExecuteEndOrExtendAppointment&quot;, CanEditOrExtendDssClient);
 	vars.put(&quot;isExecuteBookAppointment&quot;, CanBookDssClient);
@@ -6815,52 +6811,46 @@ PreParam();</stringProp>
             <collectionProp name="urls"/>
           </com.blazemeter.jmeter.http.ParallelHTTPSampler>
           <hashTree/>
-          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteEndOrExtendAppointment" enabled="true">
-            <boolProp name="IfController.evaluateAll">false</boolProp>
-            <boolProp name="IfController.useExpression">true</boolProp>
-            <stringProp name="IfController.condition">${isExecuteEndOrExtendAppointment}</stringProp>
-          </IfController>
-          <hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListVisibleResourceByMacAddress" enabled="true">
-              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&#xd;
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListVisibleResourceByMacAddress" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
   &quot;MacAddress&quot;: &quot;${MacAddress}&quot;&#xd;
 }</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListVisibleResourceByMacAddress</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-              <boolProp name="HTTPSampler.image_parser">false</boolProp>
-              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-              <boolProp name="HTTPSampler.md5">false</boolProp>
-              <intProp name="HTTPSampler.ipSourceType">0</intProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-                <stringProp name="ConstantTimer.delay">500</stringProp>
-                <stringProp name="RandomTimer.range">200</stringProp>
-              </UniformRandomTimer>
-              <hashTree/>
-              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetListVisibleResourceByMacAddress-1" enabled="true">
-                <stringProp name="scriptLanguage">javascript</stringProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="cacheKey">true</stringProp>
-                <stringProp name="script">function handleResponse()
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListVisibleResourceByMacAddress</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+              <stringProp name="RandomTimer.range">200</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetListVisibleResourceByMacAddress-1" enabled="true">
+              <stringProp name="scriptLanguage">javascript</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">function handleResponse()
 {
 	if(prev.getResponseDataAsString())
 	{
@@ -6876,22 +6866,16 @@ PreParam();</stringProp>
 }
 
 handleResponse();</stringProp>
-              </JSR223PostProcessor>
-              <hashTree/>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteValidateOpeningHourResource" enabled="true">
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-              <stringProp name="IfController.condition">${isExecuteValidateOpeningHourResource}</stringProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ValidateOpeningHourResource" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ValidateOpeningHourResource" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
   &quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
   &quot;StartDate&quot;: {&#xd;
     &quot;Year&quot;: ${ValidateOpeningHourResource_1_YearNow},&#xd;
@@ -6909,32 +6893,32 @@ handleResponse();</stringProp>
   },&#xd;
   &quot;Timezone&quot;: &quot;${TimeZone}&quot;&#xd;
 }</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ValidateOpeningHourResource</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                <boolProp name="HTTPSampler.md5">false</boolProp>
-                <intProp name="HTTPSampler.ipSourceType">0</intProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam-ValidateOpeningHourResource-1" enabled="true">
-                  <stringProp name="scriptLanguage">javascript</stringProp>
-                  <stringProp name="parameters"></stringProp>
-                  <stringProp name="filename"></stringProp>
-                  <stringProp name="cacheKey">true</stringProp>
-                  <stringProp name="script">function PreParam()
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ValidateOpeningHourResource</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam-ValidateOpeningHourResource-1" enabled="true">
+              <stringProp name="scriptLanguage">javascript</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">function PreParam()
 {
 	var dateNow= new Date();
 	
@@ -6947,19 +6931,19 @@ handleResponse();</stringProp>
 }
 
 PreParam();</stringProp>
-                </JSR223PreProcessor>
-                <hashTree/>
-                <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-                  <stringProp name="ConstantTimer.delay">500</stringProp>
-                  <stringProp name="RandomTimer.range">200</stringProp>
-                </UniformRandomTimer>
-                <hashTree/>
-                <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Handle-ValidateOpeningHourResource-1" enabled="true">
-                  <stringProp name="scriptLanguage">javascript</stringProp>
-                  <stringProp name="parameters"></stringProp>
-                  <stringProp name="filename"></stringProp>
-                  <stringProp name="cacheKey">true</stringProp>
-                  <stringProp name="script">function getRandomInt(max) {
+            </JSR223PreProcessor>
+            <hashTree/>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+              <stringProp name="RandomTimer.range">200</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Handle-ValidateOpeningHourResource-1" enabled="true">
+              <stringProp name="scriptLanguage">javascript</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
@@ -7007,22 +6991,96 @@ function handleResponse()
 }
 
 handleResponse();</stringProp>
-                </JSR223PostProcessor>
-                <hashTree/>
-              </hashTree>
-              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_End" enabled="true">
-                <boolProp name="IfController.evaluateAll">false</boolProp>
-                <boolProp name="IfController.useExpression">true</boolProp>
-                <stringProp name="IfController.condition">${isNextAction_End}</stringProp>
-              </IfController>
-              <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="EndMeeting" enabled="true">
-                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments">
-                      <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{&#xd;
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetSubjectList" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+	&quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetSubjectList</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+              <stringProp name="ConstantTimer.delay">500</stringProp>
+              <stringProp name="RandomTimer.range">200</stringProp>
+            </UniformRandomTimer>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetSubjectList-1" enabled="true">
+              <stringProp name="scriptLanguage">javascript</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function handleResponse()
+{
+	if(prev.getResponseDataAsString())
+	{
+		var response = JSON.parse(prev.getResponseDataAsString());
+		if(response &amp;&amp; response.length &gt; 0)
+		{
+		 	vars.put(&quot;NameAppoinemnt&quot;, response[getRandomInt(response.length)].Name);
+		}
+	}
+}
+
+handleResponse();</stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteEndOrExtendAppointment" enabled="true">
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+            <stringProp name="IfController.condition">${isExecuteEndOrExtendAppointment}</stringProp>
+          </IfController>
+          <hashTree>
+            <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <boolProp name="HTTPSampler.image_parser">true</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+              <collectionProp name="urls"/>
+            </com.blazemeter.jmeter.http.ParallelHTTPSampler>
+            <hashTree/>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_End" enabled="true">
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+              <stringProp name="IfController.condition">${isNextAction_End}</stringProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="EndMeeting" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
     &quot;EmailAddress&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
     &quot;StartTime&quot;: {&#xd;
         &quot;Year&quot;: ${TimeOccupied_Start_Year},&#xd;
@@ -7056,32 +7114,32 @@ handleResponse();</stringProp>
     &quot;TokenDelegatedPermission&quot;: &quot;&quot;&#xd;
 }&#xd;
 </stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </elementProp>
-                  <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-                  <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-                  <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/EndMeeting</stringProp>
-                  <stringProp name="HTTPSampler.method">POST</stringProp>
-                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                  <boolProp name="HTTPSampler.md5">false</boolProp>
-                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
-                </HTTPSamplerProxy>
-                <hashTree>
-                  <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamEndMeeting" enabled="true">
-                    <stringProp name="scriptLanguage">javascript</stringProp>
-                    <stringProp name="parameters"></stringProp>
-                    <stringProp name="filename"></stringProp>
-                    <stringProp name="cacheKey">true</stringProp>
-                    <stringProp name="script">function PreParamEndMeeting()
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/EndMeeting</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamEndMeeting" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function PreParamEndMeeting()
 {
 	var startTime = new Date();
 	
@@ -7096,23 +7154,23 @@ handleResponse();</stringProp>
 }
 
 PreParamEndMeeting();</stringProp>
-                  </JSR223PreProcessor>
-                  <hashTree/>
-                </hashTree>
+                </JSR223PreProcessor>
+                <hashTree/>
               </hashTree>
-              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_Extend" enabled="true">
-                <boolProp name="IfController.evaluateAll">false</boolProp>
-                <boolProp name="IfController.useExpression">true</boolProp>
-                <stringProp name="IfController.condition">${isNextAction_Extend}</stringProp>
-              </IfController>
-              <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ExtendMeeting" enabled="true">
-                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments">
-                      <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{&#xd;
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_Extend" enabled="true">
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+              <stringProp name="IfController.condition">${isNextAction_Extend}</stringProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ExtendMeeting" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
     &quot;EmailAddress&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
     &quot;StartTime&quot;: {&#xd;
         &quot;Year&quot;: ${TimeOccupied_Start_Year},&#xd;
@@ -7138,32 +7196,32 @@ PreParamEndMeeting();</stringProp>
     &quot;TokenDelegatedPermission&quot;: &quot;&quot;&#xd;
 }&#xd;
 </stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </elementProp>
-                  <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-                  <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-                  <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ExtendMeeting</stringProp>
-                  <stringProp name="HTTPSampler.method">POST</stringProp>
-                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                  <boolProp name="HTTPSampler.md5">false</boolProp>
-                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
-                </HTTPSamplerProxy>
-                <hashTree>
-                  <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamExtendMeeting" enabled="true">
-                    <stringProp name="scriptLanguage">javascript</stringProp>
-                    <stringProp name="parameters"></stringProp>
-                    <stringProp name="filename"></stringProp>
-                    <stringProp name="cacheKey">true</stringProp>
-                    <stringProp name="script">function PreParamExtendMeeting(){
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ExtendMeeting</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParamExtendMeeting" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function PreParamExtendMeeting(){
 	var TimeOccupied_Start_Date = vars.get(&apos;TimeOccupied_Start_Date&apos;);
 	var TimeOccupied_Start_Month = vars.get(&apos;TimeOccupied_Start_Month&apos;);
 	var TimeOccupied_Start_Year = vars.get(&apos;TimeOccupied_Start_Year&apos;);
@@ -7187,9 +7245,8 @@ PreParamEndMeeting();</stringProp>
 
 PreParamExtendMeeting();
 </stringProp>
-                  </JSR223PreProcessor>
-                  <hashTree/>
-                </hashTree>
+                </JSR223PreProcessor>
+                <hashTree/>
               </hashTree>
             </hashTree>
           </hashTree>
@@ -7199,136 +7256,13 @@ PreParamExtendMeeting();
             <stringProp name="IfController.condition">${isExecuteBookAppointment}</stringProp>
           </IfController>
           <hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetListVisibleResourceByMacAddress" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ValidateOpeningHourResource" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="" elementType="HTTPArgument">
                     <boolProp name="HTTPArgument.always_encode">false</boolProp>
                     <stringProp name="Argument.value">{&#xd;
-  &quot;MacAddress&quot;: &quot;${MacAddress}&quot;&#xd;
-}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetListVisibleResourceByMacAddress</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-              <boolProp name="HTTPSampler.image_parser">false</boolProp>
-              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-              <boolProp name="HTTPSampler.md5">false</boolProp>
-              <intProp name="HTTPSampler.ipSourceType">0</intProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-                <stringProp name="ConstantTimer.delay">500</stringProp>
-                <stringProp name="RandomTimer.range">200</stringProp>
-              </UniformRandomTimer>
-              <hashTree/>
-              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetListVisibleResourceByMacAddress-2" enabled="true">
-                <stringProp name="scriptLanguage">javascript</stringProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="cacheKey">true</stringProp>
-                <stringProp name="script">function handleResponse()
-{
-	if(prev.getResponseDataAsString())
-	{
-		var response = JSON.parse(prev.getResponseDataAsString());
-		var isExecuteValidateOpeningHourResource = false;
-		if(response &amp;&amp; response.length &gt; 0 &amp;&amp; response[0].AccountName)
-		{
-			isExecuteValidateOpeningHourResource = true;	
-		}
-	}
-
-	vars.put(&quot;isExecuteValidateOpeningHourResource&quot;, isExecuteValidateOpeningHourResource);
-}
-
-handleResponse();</stringProp>
-              </JSR223PostProcessor>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetSubjectList" enabled="true">
-              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&#xd;
-	&quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;&#xd;
-}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/GetSubjectList</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-              <boolProp name="HTTPSampler.image_parser">false</boolProp>
-              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-              <boolProp name="HTTPSampler.md5">false</boolProp>
-              <intProp name="HTTPSampler.ipSourceType">0</intProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-                <stringProp name="ConstantTimer.delay">500</stringProp>
-                <stringProp name="RandomTimer.range">200</stringProp>
-              </UniformRandomTimer>
-              <hashTree/>
-              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="GetSubjectList-1" enabled="true">
-                <stringProp name="scriptLanguage">javascript</stringProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="cacheKey">true</stringProp>
-                <stringProp name="script">function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
-function handleResponse()
-{
-	if(prev.getResponseDataAsString())
-	{
-		var response = JSON.parse(prev.getResponseDataAsString());
-		if(response &amp;&amp; response.length &gt; 0)
-		{
-		 	vars.put(&quot;NameAppoinemnt&quot;, response[getRandomInt(response.length)].Name);
-		}
-	}
-}
-
-handleResponse();</stringProp>
-              </JSR223PostProcessor>
-              <hashTree/>
-            </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isExecuteValidateOpeningHourResource" enabled="true">
-              <boolProp name="IfController.evaluateAll">false</boolProp>
-              <boolProp name="IfController.useExpression">true</boolProp>
-              <stringProp name="IfController.condition">${isExecuteValidateOpeningHourResource}</stringProp>
-            </IfController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ValidateOpeningHourResource" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
   &quot;Email&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
   &quot;StartDate&quot;: {&#xd;
     &quot;Year&quot;: ${ValidateOpeningHourResource_1_YearNow},&#xd;
@@ -7346,37 +7280,37 @@ handleResponse();</stringProp>
   },&#xd;
   &quot;Timezone&quot;: &quot;${TimeZone}&quot;&#xd;
 }</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ValidateOpeningHourResource</stringProp>
-                <stringProp name="HTTPSampler.method">POST</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                <boolProp name="HTTPSampler.md5">false</boolProp>
-                <intProp name="HTTPSampler.ipSourceType">0</intProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-                  <stringProp name="ConstantTimer.delay">500</stringProp>
-                  <stringProp name="RandomTimer.range">200</stringProp>
-                </UniformRandomTimer>
-                <hashTree/>
-                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam-ValidateOpeningHourResource-2" enabled="true">
-                  <stringProp name="scriptLanguage">javascript</stringProp>
-                  <stringProp name="parameters"></stringProp>
-                  <stringProp name="filename"></stringProp>
-                  <stringProp name="cacheKey">true</stringProp>
-                  <stringProp name="script">function PreParam()
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/ValidateOpeningHourResource</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                <stringProp name="ConstantTimer.delay">500</stringProp>
+                <stringProp name="RandomTimer.range">200</stringProp>
+              </UniformRandomTimer>
+              <hashTree/>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam-ValidateOpeningHourResource-2" enabled="true">
+                <stringProp name="scriptLanguage">javascript</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">function PreParam()
 {
 	var dateNow= new Date();
 	
@@ -7389,14 +7323,14 @@ handleResponse();</stringProp>
 }
 
 PreParam();</stringProp>
-                </JSR223PreProcessor>
-                <hashTree/>
-                <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Handle-ValidateOpeningHourResource-2" enabled="true">
-                  <stringProp name="scriptLanguage">javascript</stringProp>
-                  <stringProp name="parameters"></stringProp>
-                  <stringProp name="filename"></stringProp>
-                  <stringProp name="cacheKey">true</stringProp>
-                  <stringProp name="script">function handleResponse()
+              </JSR223PreProcessor>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Handle-ValidateOpeningHourResource-2" enabled="true">
+                <stringProp name="scriptLanguage">javascript</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">function handleResponse()
 {
 	var isNextAction_CreateAppointment = false;
 	if(prev.getResponseDataAsString())
@@ -7412,22 +7346,22 @@ PreParam();</stringProp>
 }
 
 handleResponse();</stringProp>
-                </JSR223PostProcessor>
-                <hashTree/>
-              </hashTree>
-              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_CreateAppointment" enabled="true">
-                <boolProp name="IfController.evaluateAll">false</boolProp>
-                <boolProp name="IfController.useExpression">true</boolProp>
-                <stringProp name="IfController.condition">${isNextAction_CreateAppointment}</stringProp>
-              </IfController>
-              <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CreateAppointment" enabled="true">
-                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments">
-                      <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{&#xd;
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="isNextAction_CreateAppointment" enabled="true">
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
+              <stringProp name="IfController.condition">${isNextAction_CreateAppointment}</stringProp>
+            </IfController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CreateAppointment" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
 	&quot;EmailAddress&quot;: &quot;${RoomName}@staod.onmicrosoft.com&quot;,&#xd;
 	&quot;StartTime&quot;: {&#xd;
 		&quot;Year&quot;: ${CreateAppointment_StartTime_Year},&#xd;
@@ -7452,37 +7386,37 @@ handleResponse();</stringProp>
 	&quot;TokenDelegatedPermission&quot;: &quot;&quot;&#xd;
 }&#xd;
 </stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                      </elementProp>
-                    </collectionProp>
-                  </elementProp>
-                  <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
-                  <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
-                  <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/CreateAppointment</stringProp>
-                  <stringProp name="HTTPSampler.method">POST</stringProp>
-                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                  <boolProp name="HTTPSampler.md5">false</boolProp>
-                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
-                </HTTPSamplerProxy>
-                <hashTree>
-                  <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-                    <stringProp name="ConstantTimer.delay">1000</stringProp>
-                    <stringProp name="RandomTimer.range">3000</stringProp>
-                  </UniformRandomTimer>
-                  <hashTree/>
-                  <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam CreateAppointment" enabled="true">
-                    <stringProp name="scriptLanguage">javascript</stringProp>
-                    <stringProp name="parameters"></stringProp>
-                    <stringProp name="filename"></stringProp>
-                    <stringProp name="cacheKey">true</stringProp>
-                    <stringProp name="script">function PreParam()
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${hostname}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">/${sitename}/api/${apiversion}/Client/CreateAppointment</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">1000</stringProp>
+                  <stringProp name="RandomTimer.range">3000</stringProp>
+                </UniformRandomTimer>
+                <hashTree/>
+                <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="PreParam CreateAppointment" enabled="true">
+                  <stringProp name="scriptLanguage">javascript</stringProp>
+                  <stringProp name="parameters"></stringProp>
+                  <stringProp name="filename"></stringProp>
+                  <stringProp name="cacheKey">true</stringProp>
+                  <stringProp name="script">function PreParam()
 {
 	var dateNow = new Date();
 	var startTime = new Date(dateNow.getTime());
@@ -7504,27 +7438,45 @@ handleResponse();</stringProp>
 }
 
 PreParam();</stringProp>
-                  </JSR223PreProcessor>
-                  <hashTree/>
-                </hashTree>
-                <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
-                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                    <collectionProp name="Arguments.arguments"/>
-                  </elementProp>
-                  <boolProp name="HTTPSampler.image_parser">true</boolProp>
-                  <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
-                  <collectionProp name="urls"/>
-                </com.blazemeter.jmeter.http.ParallelHTTPSampler>
-                <hashTree>
-                  <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-                    <stringProp name="ConstantTimer.delay">5000</stringProp>
-                  </ConstantTimer>
-                  <hashTree/>
-                </hashTree>
+                </JSR223PreProcessor>
+                <hashTree/>
+              </hashTree>
+              <com.blazemeter.jmeter.http.ParallelHTTPSampler guiclass="com.blazemeter.jmeter.http.ParallelHTTPSamplerGui" testclass="com.blazemeter.jmeter.http.ParallelHTTPSampler" testname="jp@gc - Parallel HTTP Requests" enabled="true">
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments"/>
+                </elementProp>
+                <boolProp name="HTTPSampler.image_parser">true</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+                <collectionProp name="urls"/>
+              </com.blazemeter.jmeter.http.ParallelHTTPSampler>
+              <hashTree>
+                <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">5000</stringProp>
+                </ConstantTimer>
+                <hashTree/>
               </hashTree>
             </hashTree>
           </hashTree>
         </hashTree>
+        <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="SaveSetting" enabled="true">
+          <stringProp name="scriptLanguage">javascript</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">function SaveSetting()
+{
+	var loopIndex = vars.getIteration();
+	var indexDevice = ${__threadNum};
+	var CanBookDssClient = vars.get(&quot;CanBookDssClient&quot;);
+	var CanEditOrExtendDssClient	=  vars.get(&quot;CanEditOrExtendDssClient&quot;);
+	
+	props.put(&quot;CanBookDssClient&quot; + indexDevice, CanBookDssClient);
+	props.put(&quot;CanEditOrExtendDssClient&quot; + indexDevice, CanEditOrExtendDssClient);
+}
+
+SaveSetting();</stringProp>
+        </JSR223PostProcessor>
+        <hashTree/>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DssClient-Kiosk-GetFloorplanInformation" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
